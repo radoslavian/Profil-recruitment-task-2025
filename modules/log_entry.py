@@ -38,10 +38,10 @@ class LogEntry:
 
     @staticmethod
     def keys() -> List[str]:
-        return ["date", "level", "msg"]
+        return ["date", "level", "message"]
 
     def values(self) -> List[str]:
-        return [self._date, self._log_level.name, self._message]
+        return [self.date, self.level, self.message]
 
     def __repr__(self):
         date = self.date.isoformat()
@@ -51,4 +51,4 @@ class LogEntry:
 
     date = property(lambda self: self._date)
     level = property(lambda self: self._log_level.name)
-    msg = property(lambda self: self._message)
+    message = property(lambda self: self._message)

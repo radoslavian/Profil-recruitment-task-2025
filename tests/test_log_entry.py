@@ -30,7 +30,7 @@ class LogEntryAttrEncapsulationConversion(TestCase):
     def test_encapsulation_reading(self):
         self.assertEqual(self.log_entry.level, self.log_level_value)
         self.assertEqual(self.log_entry.date, self.date)
-        self.assertEqual(self.log_entry.msg, self.message)
+        self.assertEqual(self.log_entry.message, self.message)
 
     def test_encapsulation_writing(self):
         """
@@ -42,12 +42,12 @@ class LogEntryAttrEncapsulationConversion(TestCase):
         def fail_date():
             self.log_entry.date = datetime.datetime(1988, 3, 9, 11, 10, 10)
 
-        def fail_msg():
-            self.log_entry.msg = "new message"
+        def fail_message():
+            self.log_entry.message = "new message"
 
         self.assertRaises(AttributeError, fail_level)
         self.assertRaises(AttributeError, fail_date)
-        self.assertRaises(AttributeError, fail_msg)
+        self.assertRaises(AttributeError, fail_message)
 
     def test_iso_date(self):
         """
@@ -85,7 +85,7 @@ class LogEntryAttrEncapsulationConversion(TestCase):
         self.assertEqual(log_level_name, self.received_dict["level"])
 
     def test_dict_message(self):
-        self.assertEqual(self.message, self.received_dict["msg"])
+        self.assertEqual(self.message, self.received_dict["message"])
         
 
 class LogEntryFromDict(TestCase):
@@ -108,7 +108,7 @@ class LogEntryFromDict(TestCase):
         self.assertEqual(self.log_entry_from_dict["level"], self.level.name)
 
     def test_message(self):
-        self.assertEqual(self.log_entry_from_dict["msg"], self.message)
+        self.assertEqual(self.log_entry_from_dict["message"], self.message)
 
     def test_date(self):
         self.assertEqual(self.log_entry_from_dict["date"], self.date)

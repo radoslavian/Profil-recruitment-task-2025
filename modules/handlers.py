@@ -33,7 +33,9 @@ class FileHandler(Handler):
                 f.write("")
 
     def persist_log(self, entry: LogEntry):
-        pass
+        log_line = f"{entry.date.isoformat()} {entry.level} {entry.message}\n"
+        with open(self.filename, "a") as f:
+            f.write(log_line)
 
     def retrieve_all_logs(self):
         pass
