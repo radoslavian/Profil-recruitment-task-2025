@@ -2,7 +2,7 @@ from enum import Enum
 import datetime
 
 
-class LogLevelValues(Enum):
+class LogLevelValue(Enum):
     DEBUG = 0
     INFO = 1
     WARNING = 2
@@ -10,13 +10,13 @@ class LogLevelValues(Enum):
     CRITICAL = 4
 
 
-DEFAULT_LOG_LEVEL = LogLevelValues.DEBUG
+DEFAULT_LOG_LEVEL = LogLevelValue.DEBUG
 
 
 class LogEntry:
     def __init__(self,
                  date: datetime.datetime,
-                 log_level: LogLevelValues,
+                 log_level: LogLevelValue,
                  message: str):
         self.date = date
         self.log_level = log_level
@@ -25,5 +25,5 @@ class LogEntry:
     def __repr__(self):
         date = self.date.isoformat()
         return f"LogEntry(date={date}, " \
-            f"log_level='{self.log_level}', " \
+            f"log_level='{self.log_level.name}', " \
             f"message='{self.message}')"
