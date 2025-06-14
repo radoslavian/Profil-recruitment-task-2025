@@ -41,7 +41,7 @@ class LogEntry:
         return ["date", "level", "msg"]
 
     def values(self) -> List[str]:
-        return [self.date.isoformat(), self.log_level.name, self.message]
+        return [self.date, self.log_level.name, self.message]
 
     def __repr__(self):
         date = self.date.isoformat()

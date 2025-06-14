@@ -56,8 +56,7 @@ class LogEntryConversion(TestCase):
         self.assertEqual(expected_output, self.received_representation)
 
     def test_dict_date(self):
-        iso_date = self.date.isoformat()
-        self.assertEqual(iso_date, self.received_dict["date"])
+        self.assertEqual(self.date, self.received_dict["date"])
 
     def test_dict_log_level(self):
         log_level_name = self.log_level.name
@@ -90,6 +89,4 @@ class LogEntryFromDict(TestCase):
         self.assertEqual(self.log_entry_from_dict["msg"], self.message)
 
     def test_date(self):
-        iso_date = self.date.isoformat()
-
-        self.assertEqual(self.log_entry_from_dict["date"], iso_date)
+        self.assertEqual(self.log_entry_from_dict["date"], self.date)
