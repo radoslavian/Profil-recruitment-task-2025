@@ -39,7 +39,7 @@ class RepresentationTestCase(TestCase):
 
     def test_output(self):
         """
-        The representation output should in the correct format.
+        The representation output should be in the correct format.
         """
         expected_output = f"LogEntry(date={self.date.isoformat()}, "\
             f"log_level='{self.log_level}', message='{self.message}')"
