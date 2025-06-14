@@ -15,8 +15,8 @@ class LogEntryTestCase(TestCase):
         cls.message = "warning message"
 
         log_entry = LogEntry(date=cls.date,
-                             log_level=cls.log_level,
-                             message=cls.message)
+                             level=cls.log_level,
+                             msg=cls.message)
 
         cls.received_representation = repr(log_entry)
         cls.received_dict = log_entry.to_dict()
@@ -59,3 +59,31 @@ class LogEntryTestCase(TestCase):
 
     def test_dict_message(self):
         self.assertEqual(self.message, self.received_dict["msg"])
+        
+
+class LogEntryFromDict(TestCase):
+    """
+    Getting a new LogItem instance from a dictionary.
+    """
+    @classmethod
+    def setUpClass(cls):
+        cls.level = LogLevelValue.ERROR
+        cls.message = "logged message"
+        cls.date = datetime.datetime(
+            1987, 3, 9, 11, 10, 10)
+        cls.log_entry = {"level": cls.level,
+                         "msg": cls.message,
+                         "date": cls.date}
+
+        cls.log_entry_from_dict = LogEntry.from_dict(cls.log_entry)
+
+    def test_log_level(self):
+        self.assertEqual(self.log_entry_from_dict["level"], self.level.name)
+
+    def test_message(self):
+        self.assertEqual(self.log_entry_from_dict["msg"], self.message)
+
+    def test_date(self):
+        iso_date = self.date.isoformat()
+
+        self.assertEqual(self.log_entry_from_dict["date"], iso_date)

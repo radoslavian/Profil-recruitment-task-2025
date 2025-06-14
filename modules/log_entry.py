@@ -1,3 +1,4 @@
+from __future__ import annotations
 from enum import Enum
 from typing import Dict, List
 import datetime
@@ -17,14 +18,20 @@ DEFAULT_LOG_LEVEL = LogLevelValue.DEBUG
 class LogEntry:
     def __init__(self,
                  date: datetime.datetime,
-                 log_level: LogLevelValue,
-                 message: str):
+                 level: LogLevelValue,
+                 msg: str):
         self.date = date
-        self.log_level = log_level
-        self.message = message
+        self.log_level = level
+        self.message = msg
 
     def to_dict(self) -> Dict:
         return dict(self)
+
+    @staticmethod
+    def from_dict(entry: Dict[str, str]) -> LogEntry:
+        return LogEntry(date=entry["date"],
+                        level=entry["level"],
+                        msg=entry["msg"])
 
     def __getitem__(self, key: str):
         return dict(zip(self.keys(), self.values()))[key]
