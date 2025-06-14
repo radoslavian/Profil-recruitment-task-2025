@@ -7,7 +7,7 @@ from modules.log_entry import LogEntry, LogLevelValue
 
 @patch("builtins.open", new_callable=mock_open)
 @patch("os.path.exists", return_value=False)
-class FileHandlerFileAccessCreation(TestCase):
+class FileAccessCreation(TestCase):
     """
     Tests for accessing/creating log csv files.
     """
@@ -38,7 +38,7 @@ class FileHandlerFileAccessCreation(TestCase):
         handle.write.assert_called_once_with("")
 
 
-class FileHandlerPersistingLogs(TestCase):
+class PersistingLogs(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.file_path = "/file/to/open.txt"
