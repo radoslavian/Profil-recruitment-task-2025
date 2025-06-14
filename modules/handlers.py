@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from log_entry import LogEntry
+from modules.log_entry import LogEntry
 from typing import List
 
 
