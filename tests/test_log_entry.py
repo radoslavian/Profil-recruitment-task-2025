@@ -6,7 +6,13 @@ from modules.log_entry import LogEntry, LogLevelValue
 # docstrings are ommited in cases where the test name
 # is sufficiently descriptive
 
-class LogEntryTestCase(TestCase):
+
+class LogEntryConversion(TestCase):
+    """
+    Tests for converting a LogEntry instance into:
+    + a machine-readable string representation (obtained using repr())
+    + Python dictionary
+    """
     @classmethod
     def setUpClass(cls):
         cls.date = datetime.datetime(1987, 3, 9, 11, 10, 10)
