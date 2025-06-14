@@ -33,7 +33,7 @@ class LogEntry:
     def keys() -> List[str]:
         return ["date", "level", "msg"]
 
-    def values(self):
+    def values(self) -> List[str]:
         return [self.date.isoformat(), self.log_level.name, self.message]
 
     def __repr__(self):
