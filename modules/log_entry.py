@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Dict, List
 import datetime
 
 
@@ -22,10 +23,18 @@ class LogEntry:
         self.log_level = log_level
         self.message = message
 
-    def to_dict(self) -> dict:
-        return {"date": self.date.isoformat(),
-                "level": self.log_level.name,
-                "msg": self.message}
+    def to_dict(self) -> Dict:
+        return dict(self)
+
+    def __getitem__(self, key: str):
+        return dict(zip(self.keys(), self.values()))[key]
+
+    @staticmethod
+    def keys() -> List[str]:
+        return ["date", "level", "msg"]
+
+    def values(self):
+        return [self.date.isoformat(), self.log_level.name, self.message]
 
     def __repr__(self):
         date = self.date.isoformat()
