@@ -22,8 +22,13 @@ class LogEntry:
         self.log_level = log_level
         self.message = message
 
+    def to_dict(self) -> dict:
+        return {"date": self.date.isoformat(),
+                "level": self.log_level.name,
+                "msg": self.message}
+
     def __repr__(self):
         date = self.date.isoformat()
         return f"LogEntry(date={date}, " \
-            f"log_level='{self.log_level.name}', " \
-            f"message='{self.message}')"
+            f"level='{self.log_level.name}', " \
+            f"msg='{self.message}')"
