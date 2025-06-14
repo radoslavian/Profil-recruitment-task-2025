@@ -7,9 +7,9 @@ from modules.log_entry import LogEntry, LogLevelValue
 # is sufficiently descriptive
 
 
-class LogEntryConversion(TestCase):
+class LogEntryAttrEncapsulationConversion(TestCase):
     """
-    Tests for converting a LogEntry instance into:
+    Tests for attributes encapsulation and converting a LogEntry instance into:
     + a machine-readable string representation (obtained using repr())
     + Python dictionary
     """
@@ -20,12 +20,34 @@ class LogEntryConversion(TestCase):
         cls.log_level = LogLevelValue[cls.log_level_value]
         cls.message = "warning message"
 
-        log_entry = LogEntry(date=cls.date,
-                             level=cls.log_level,
-                             msg=cls.message)
+        cls.log_entry = LogEntry(date=cls.date,
+                                 level=cls.log_level,
+                                 msg=cls.message)
 
-        cls.received_representation = repr(log_entry)
-        cls.received_dict = log_entry.to_dict()
+        cls.received_representation = repr(cls.log_entry)
+        cls.received_dict = cls.log_entry.to_dict()
+
+    def test_encapsulation_reading(self):
+        self.assertEqual(self.log_entry.level, self.log_level_value)
+        self.assertEqual(self.log_entry.date, self.date)
+        self.assertEqual(self.log_entry.msg, self.message)
+
+    def test_encapsulation_writing(self):
+        """
+        Should fail on an attempt to overwrite a public attribute.
+        """
+        def fail_level():
+            self.log_entry.level = "new level"
+
+        def fail_date():
+            self.log_entry.date = datetime.datetime(1988, 3, 9, 11, 10, 10)
+
+        def fail_msg():
+            self.log_entry.msg = "new message"
+
+        self.assertRaises(AttributeError, fail_level)
+        self.assertRaises(AttributeError, fail_date)
+        self.assertRaises(AttributeError, fail_msg)
 
     def test_iso_date(self):
         """

@@ -20,9 +20,9 @@ class LogEntry:
                  date: datetime.datetime,
                  level: LogLevelValue,
                  msg: str):
-        self.date = date
-        self.log_level = level
-        self.message = msg
+        self._date = date
+        self._log_level = level
+        self._message = msg
 
     def to_dict(self) -> Dict:
         return dict(self)
@@ -41,10 +41,14 @@ class LogEntry:
         return ["date", "level", "msg"]
 
     def values(self) -> List[str]:
-        return [self.date, self.log_level.name, self.message]
+        return [self._date, self._log_level.name, self._message]
 
     def __repr__(self):
         date = self.date.isoformat()
         return f"LogEntry(date={date}, " \
-            f"level='{self.log_level.name}', " \
-            f"msg='{self.message}')"
+            f"level='{self._log_level.name}', " \
+            f"msg='{self._message}')"
+
+    date = property(lambda self: self._date)
+    level = property(lambda self: self._log_level.name)
+    msg = property(lambda self: self._message)
