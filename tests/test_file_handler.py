@@ -29,12 +29,9 @@ class FileAccessCreation(TestCase):
         FileHandler(self.file_path)
         mock_open_file.assert_called_once_with(self.file_path, "w")
 
-    def test_writing_new_file(self, *rest):
-        # TODO: how to get the same result using patch as a decorator?
-        m = mock_open()
-        with patch("builtins.open", m):
-            FileHandler(self.file_path)
-        handle = m()
+    def test_writing_new_file(self, _, mock_file_open):
+        FileHandler(self.file_path)
+        handle = mock_file_open()
         handle.write.assert_called_once_with("")
 
 
