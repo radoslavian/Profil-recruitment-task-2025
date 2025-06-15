@@ -65,10 +65,52 @@ class PersistingLogs(TestCase):
 
     def test_writing_log(self):
         """
-        Should save log entry into a file.
+        Should save a log entry into a file.
         """
         file_handle = self.mock_file_open()
         call_argument = (f"{self.log_entry.date.isoformat()} "
                          f"{self.log_entry.level} "
                          f"{self.log_entry.message}\n")
         file_handle.write.assert_called_with(call_argument)
+
+
+class RetrieveLogs(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.log_entry_1 = {
+            "date": datetime.datetime.fromisoformat("1987-03-09T11:10:10"),
+            "level": LogLevelValue.WARNING,
+            "msg": "1st logged message"}
+        cls.log_entry_2 = {
+            "date": datetime.datetime.fromisoformat("1987-03-10T11:10:10"),
+            "level": LogLevelValue.ERROR,
+            "msg": "2nd logged message"}
+        cls.read_data = (f"{cls.log_entry_1['date'].isoformat()} "
+                         f"{cls.log_entry_1['level'].name} "
+                         f"{cls.log_entry_1['msg']}\n"
+                         f"{cls.log_entry_2['date'].isoformat()} "
+                         f"{cls.log_entry_2['level'].name} "
+                         f"{cls.log_entry_2['msg']}")
+        cls.file_path = "/path/to/a/file.txt"
+        cls.mock_file_open = mock_open(read_data=cls.read_data)
+
+    def setUp(self):
+        with patch("builtins.open", self.mock_file_open):
+            file_handler = FileHandler(self.file_path)
+            self.log_entries = file_handler.retrieve_all_logs()
+
+    def test_opening_file(self):
+        """
+        Should open a file for reading.
+        """
+        self.mock_file_open.assert_called_with(self.file_path, "r")
+
+    def test_fetching_entries(self):
+        """
+        Should load log entries from a file.
+        """
+        log_entry_1 = LogEntry.from_dict(self.log_entry_1).to_dict()
+        log_entry_2 = LogEntry.from_dict(self.log_entry_2).to_dict()
+
+        self.assertDictEqual(log_entry_1, self.log_entries[0].to_dict())
+        self.assertDictEqual(log_entry_2, self.log_entries[1].to_dict())
