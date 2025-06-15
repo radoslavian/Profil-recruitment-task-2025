@@ -111,4 +111,5 @@ class LogEntryFromDict(TestCase):
         self.assertEqual(self.log_entry_from_dict["message"], self.message)
 
     def test_date(self):
-        self.assertEqual(self.log_entry_from_dict["date"], self.date.isoformat())
+        self.assertEqual(self.log_entry_from_dict["date"],
+                         self.date.isoformat())

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import datetime
 from modules.log_entry import LogEntry, LogLevelValue
-from typing import List, TextIO
+from typing import List, TextIO, Dict
 import os
 import json
 
@@ -76,13 +76,26 @@ class JsonHandler(Handler):
                 json.dump([], file_in)
 
     def persist_log(self, entry: LogEntry):
-        all_logs_data = []
-        if (os.path.exists(self.filepath) and os.path.getsize(self.filepath) > 0):
-            with open(self.filepath, "r") as f_in:
-                all_logs_data = json.load(f_in)
-        all_logs_data.append(entry.to_dict())
+        log_entries = []
+        try:
+            if self._nonempty_file_exists():
+                log_entries = self._load_entries()
+        except (json.JSONDecodeError, FileNotFoundError):
+            log_entries = []
+        log_entries = [*log_entries, entry.to_dict()]
+        self._save_entries(log_entries)
+
+    def _save_entries(self, log_entries: List[Dict]):
         with open(self.filepath, 'w', ) as f_out:
-            json.dump(all_logs_data, f_out, indent=4)
+            json.dump(log_entries, f_out, indent=4)
+
+    def _load_entries(self):
+        with open(self.filepath, "r") as f_in:
+            return json.load(f_in)
+
+    def _nonempty_file_exists(self) -> bool:
+        return (os.path.exists(self.filepath)
+                and os.path.getsize(self.filepath) > 0)
 
     def retrieve_all_logs(self) -> List[LogEntry]:
         pass
