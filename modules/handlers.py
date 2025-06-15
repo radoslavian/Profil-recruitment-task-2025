@@ -3,6 +3,7 @@ import datetime
 from modules.log_entry import LogEntry, LogLevelValue
 from typing import List, TextIO
 import os
+import json
 
 
 class Handler(ABC):
@@ -65,7 +66,20 @@ class FileHandler(Handler):
 
 
 class JsonHandler(Handler):
-    pass
+    def __init__(self, filepath):
+        self.filepath = filepath
+        super(JsonHandler, self).__init__()
+
+    def _create_log_if_non_existent(self):
+        if not os.path.exists(self.filepath):
+            with open(self.filepath, "w") as file_in:
+                json.dump([], file_in)
+
+    def persist_log(self, entry: LogEntry):
+        pass
+
+    def retrieve_all_logs(self) -> List[LogEntry]:
+        pass
 
 
 class CSVHandler(Handler):
