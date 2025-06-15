@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import datetime
 from modules.log_entry import LogEntry, LogLevelValue
-from typing import List
+from typing import List, TextIO
 import os
 
 
@@ -46,7 +46,7 @@ class FileHandler(Handler):
             return []
         return log_entries
 
-    def _read_entries_from_file(self, file_handle) -> List[LogEntry]:
+    def _read_entries_from_file(self, file_handle: TextIO) -> List[LogEntry]:
         return [self._read_line_into_log_entry(line)
                 for line in file_handle.readlines()]
 
