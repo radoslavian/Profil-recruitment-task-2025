@@ -35,7 +35,7 @@ class FileHandler(Handler):
                 f.write("")
 
     def persist_log(self, entry: LogEntry):
-        log_line = f"{entry.date.isoformat()} {entry.level} {entry.message}\n"
+        log_line = f"{entry.date} {entry.level} {entry.message}\n"
         with open(self.filename, "a") as f:
             f.write(log_line)
 
@@ -76,7 +76,13 @@ class JsonHandler(Handler):
                 json.dump([], file_in)
 
     def persist_log(self, entry: LogEntry):
-        pass
+        all_logs_data = []
+        if (os.path.exists(self.filepath) and os.path.getsize(self.filepath) > 0):
+            with open(self.filepath, "r") as f_in:
+                all_logs_data = json.load(f_in)
+        all_logs_data.append(entry.to_dict())
+        with open(self.filepath, 'w', ) as f_out:
+            json.dump(all_logs_data, f_out, indent=4)
 
     def retrieve_all_logs(self) -> List[LogEntry]:
         pass

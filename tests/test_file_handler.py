@@ -3,6 +3,7 @@ from unittest.mock import patch, mock_open
 import datetime
 from modules.handlers import FileHandler
 from modules.log_entry import LogEntry, LogLevelValue
+from .test_data import log_entry
 
 
 @patch("builtins.open", new_callable=mock_open)
@@ -40,14 +41,7 @@ class PersistingLogs(TestCase):
     def setUpClass(cls):
         cls.file_path = "/file/to/open.txt"
         cls.mock_file_open = mock_open()
-        date = datetime.datetime(1987, 3, 9, 11, 10, 10)
-        log_level_value = "WARNING"
-        log_level = LogLevelValue[log_level_value]
-        message = "logged message"
-        log_entry_d = {"level": log_level,
-                       "msg": message,
-                       "date": date}
-        cls.log_entry = LogEntry.from_dict(log_entry_d)
+        log_entry_d, cls.log_entry = log_entry()
 
     def setUp(self):
         with patch("builtins.open", self.mock_file_open):
@@ -65,7 +59,7 @@ class PersistingLogs(TestCase):
         Should save a log entry into a file.
         """
         file_handle = self.mock_file_open()
-        call_argument = (f"{self.log_entry.date.isoformat()} "
+        call_argument = (f"{self.log_entry.date} "
                          f"{self.log_entry.level} "
                          f"{self.log_entry.message}\n")
         file_handle.write.assert_called_with(call_argument)
