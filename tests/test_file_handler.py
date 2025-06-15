@@ -114,3 +114,16 @@ class RetrieveLogs(TestCase):
 
         self.assertDictEqual(log_entry_1, self.log_entries[0].to_dict())
         self.assertDictEqual(log_entry_2, self.log_entries[1].to_dict())
+
+    def test_malformed_input(self):
+        """
+        Should return empty list if the input file contains malformed data.
+        """
+        read_data = "malformed line" + self.read_data
+        mock_file_open = mock_open(read_data=read_data)
+
+        with patch("builtins.open", mock_file_open):
+            file_handler = FileHandler(self.file_path)
+            log_entries = file_handler.retrieve_all_logs()
+
+        self.assertFalse(log_entries)

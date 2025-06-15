@@ -48,7 +48,7 @@ class FileHandler(Handler):
 
     def _read_entries_from_file(self, file_handle: TextIO) -> List[LogEntry]:
         return [self._read_line_into_log_entry(line)
-                for line in file_handle.readlines()]
+                for line in filter(None, file_handle.readlines())]
 
     @staticmethod
     def _read_line_into_log_entry(line: str) -> LogEntry:
@@ -56,9 +56,11 @@ class FileHandler(Handler):
         date = datetime.datetime.fromisoformat(parts[0])
         level = LogLevelValue[parts[1]]
         msg = parts[2]
-
         if len(parts) == 3:
             log_entry = LogEntry(date=date, level=level, msg=msg)
+        else:
+            # for the sake of safety
+            raise ValueError
         return log_entry
 
 
