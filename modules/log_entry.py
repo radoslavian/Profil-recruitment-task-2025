@@ -17,11 +17,11 @@ DEFAULT_LOG_LEVEL = LogLevelValue.DEBUG
 
 class LogEntry:
     def __init__(self,
-                 date: str,
-                 level: str,
+                 date: datetime.datetime,
+                 level: LogLevelValue,
                  msg: str):
-        self._date = datetime.datetime.fromisoformat(date)
-        self._log_level = LogLevelValue[level]
+        self._date = date
+        self._log_level = level
         self._message = msg
 
     def to_dict(self) -> Dict:
@@ -29,8 +29,10 @@ class LogEntry:
 
     @staticmethod
     def from_dict(entry: Dict[str, str]) -> LogEntry:
-        return LogEntry(date=entry["date"],
-                        level=entry["level"],
+        date = datetime.datetime.fromisoformat(entry["date"])
+        level = LogLevelValue[entry["level"]]
+        return LogEntry(date=date,
+                        level=level,
                         msg=entry["message"])
 
     def __getitem__(self, key: str):
@@ -45,8 +47,8 @@ class LogEntry:
 
     def __repr__(self):
         return f"LogEntry(date={self.date}, " \
-            f"level='{self._log_level.name}', " \
-            f"msg='{self._message}')"
+            f"level='{self.level}', " \
+            f"msg='{self.message}')"
 
     date = property(lambda self: self._date.isoformat())
     level = property(lambda self: self._log_level.name)

@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from modules.log_entry import LogEntry
 from typing import List, TextIO, Dict
+import datetime
 import os
 import json
+from modules.log_entry import LogLevelValue, LogEntry
 
 
 class Handler(ABC):
@@ -53,8 +54,8 @@ class FileHandler(Handler):
     @staticmethod
     def _read_line_into_log_entry(line: str) -> LogEntry:
         parts = line.strip().split(" ", 2)
-        date = parts[0]
-        level = parts[1]
+        date = datetime.datetime.fromisoformat(parts[0])
+        level = LogLevelValue[parts[1]]
         msg = parts[2]
         if len(parts) == 3:
             log_entry = LogEntry(date=date, level=level, msg=msg)
