@@ -1,8 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch, mock_open
-import datetime
 from modules.handlers import FileHandler
-from modules.log_entry import LogEntry, LogLevelValue
+from modules.log_entry import LogEntry
 from .test_data import log_entry
 
 
@@ -20,7 +19,7 @@ class FileAccessCreation(TestCase):
         """
         On receiving a filepath, __init__ should check if a file exists.
         """
-        file_handler = FileHandler(self.file_path)
+        FileHandler(self.file_path)
         mock_exists.assert_called_once_with(self.file_path)
 
     def test_opening_file(self, _, mock_open_file):
