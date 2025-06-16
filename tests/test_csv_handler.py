@@ -49,4 +49,4 @@ class LogFileAccessCreation(TestCase):
         mock_open_file.assert_any_call(self.filepath, 'w', newline='')
         self.writer_mock.assert_any_call(file_handle)
         self.writer_mock.return_value.writerow.assert_called_once_with(
-            ["date", "level", "msg"])
+            ["date", "level", "message"])

@@ -121,7 +121,7 @@ class CSVHandler(Handler):
                 self.file_path) == 0):
             with open(self.file_path, 'w', newline='', ) as f:
                 writer = csv.writer(f)
-                writer.writerow(['date', 'level', 'msg'])
+                writer.writerow(['date', 'level', 'message'])
 
     def persist_log(self, entry: LogEntry):
         pass
