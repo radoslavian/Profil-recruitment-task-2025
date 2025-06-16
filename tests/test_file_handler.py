@@ -39,10 +39,10 @@ class PersistingLogs(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.file_path = "/file/to/open.txt"
-        cls.mock_file_open = mock_open()
         log_entry_d, cls.log_entry = log_entry()
 
     def setUp(self):
+        self.mock_file_open = mock_open()
         with patch("builtins.open", self.mock_file_open):
             file_handler = FileHandler(self.file_path)
             file_handler.persist_log(self.log_entry)
