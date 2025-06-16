@@ -112,7 +112,7 @@ class JsonHandler(Handler):
 
 
 class CSVHandler(Handler):
-    def __init__(self, filepath):
+    def __init__(self, filepath: str):
         self.file_path = filepath
         super(CSVHandler, self).__init__()
 
