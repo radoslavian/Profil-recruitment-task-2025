@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import patch, mock_open, MagicMock
 import json
 from modules.handlers import JsonHandler
-from .test_data import log_entry
+from .test_data import log_entry, fake_log_entry
 
 
 @patch("builtins.open", new_callable=mock_open)
@@ -75,3 +75,61 @@ class LogPersistance(TestCase):
                     [self.log_entry.to_dict()], file_handle, indent=4)
 
 
+@patch("builtins.open", new_callable=mock_open)
+class LogsRetrieval(TestCase):
+    """
+    Test suite for the JsonHandler.retrieve_all_logs() method.
+    """
+    @classmethod
+    def setUpClass(cls):
+        cls.file_path = "/path/to/file.json"
+        number_of_entries = range(0, 2)
+
+        cls.log_entries = [fake_log_entry()[1] for i in number_of_entries]
+        cls.log_entries_d = [log_entry.to_dict()
+                             for log_entry in cls.log_entries]
+
+    def test_file_opening(self, mock_file_open):
+        """
+        Should call 'open' to access the file.
+        """
+        with patch("json.load", return_value=self.log_entries_d):
+            json_handler = JsonHandler(self.file_path)
+            json_handler.retrieve_all_logs()
+            mock_file_open.assert_any_call(self.file_path, "r")
+
+    def test_json_data_loading(self, *args):
+        with patch("json.load", return_value=self.log_entries_d):
+            json_handler = JsonHandler(self.file_path)
+            received_log_entries = set(
+                str(log) for log in json_handler.retrieve_all_logs())
+        expected_log_entries = set(str(log) for log in self.log_entries)
+
+        self.assertSetEqual(expected_log_entries, received_log_entries)
+
+    def test_file_not_found_exception(self, *args):
+        """
+        Should return empty list if FileNotFoundError occurs.
+        """
+        def raise_file_not_found_error(arg):
+            raise FileNotFoundError
+
+        with patch("json.load", new=raise_file_not_found_error):
+            json_handler = JsonHandler(self.file_path)
+            entries = json_handler.retrieve_all_logs()
+
+        self.assertFalse(entries)
+
+    def test_json_decoder_error_exception(self, *args):
+        """
+        Should return empty list if JSONDecodeError occurs.
+        """
+        def raise_json_decoder_error(arg):
+            raise json.JSONDecodeError(
+                "intentional exception", "doc", 1)
+
+        with patch("json.load", new=raise_json_decoder_error):
+            json_handler = JsonHandler(self.file_path)
+            entries = json_handler.retrieve_all_logs()
+
+        self.assertFalse(entries)

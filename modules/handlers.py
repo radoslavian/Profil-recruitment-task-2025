@@ -54,8 +54,8 @@ class FileHandler(Handler):
     @staticmethod
     def _read_line_into_log_entry(line: str) -> LogEntry:
         parts = line.strip().split(" ", 2)
-        date = datetime.datetime.fromisoformat(parts[0])
-        level = LogLevelValue[parts[1]]
+        date = parts[0]
+        level = parts[1]
         msg = parts[2]
         if len(parts) == 3:
             log_entry = LogEntry(date=date, level=level, msg=msg)
@@ -98,7 +98,16 @@ class JsonHandler(Handler):
                 and os.path.getsize(self.filepath) > 0)
 
     def retrieve_all_logs(self) -> List[LogEntry]:
-        pass
+        log_entries = []
+        try:
+            with open(self.filepath, "r") as file_in:
+                loaded_log_entries = json.load(file_in)
+                for entry in loaded_log_entries:
+                    log_entry = LogEntry.from_dict(entry)
+                    log_entries.append(log_entry)
+        except (FileNotFoundError, json.decoder.JSONDecodeError):
+            return []
+        return log_entries
 
 
 class CSVHandler(Handler):

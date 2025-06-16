@@ -69,19 +69,19 @@ class RetrieveLogs(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.log_entry_1 = {
-            "date": datetime.datetime.fromisoformat("1987-03-09T11:10:10"),
-            "level": LogLevelValue.WARNING,
-            "msg": "1st logged message"}
+            "date": "1987-03-09T11:10:10",  # isoformat date
+            "level": "WARNING",
+            "message": "1st logged message"}
         cls.log_entry_2 = {
-            "date": datetime.datetime.fromisoformat("1987-03-10T11:10:10"),
-            "level": LogLevelValue.ERROR,
-            "msg": "2nd logged message"}
-        cls.read_data = (f"{cls.log_entry_1['date'].isoformat()} "
-                         f"{cls.log_entry_1['level'].name} "
-                         f"{cls.log_entry_1['msg']}\n"
-                         f"{cls.log_entry_2['date'].isoformat()} "
-                         f"{cls.log_entry_2['level'].name} "
-                         f"{cls.log_entry_2['msg']}")
+            "date": "1987-03-10T11:10:10",
+            "level": "ERROR",
+            "message": "2nd logged message"}
+        cls.read_data = (f"{cls.log_entry_1['date']} "
+                         f"{cls.log_entry_1['level']} "
+                         f"{cls.log_entry_1['message']}\n"
+                         f"{cls.log_entry_2['date']} "
+                         f"{cls.log_entry_2['level']} "
+                         f"{cls.log_entry_2['message']}")
         cls.file_path = "/path/to/a/file.txt"
         cls.mock_file_open = mock_open(read_data=cls.read_data)
 
