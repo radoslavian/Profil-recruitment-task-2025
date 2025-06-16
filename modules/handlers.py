@@ -3,6 +3,7 @@ from typing import List, TextIO, Dict
 import datetime
 import os
 import json
+import csv
 from modules.log_entry import LogLevelValue, LogEntry
 
 
@@ -111,7 +112,22 @@ class JsonHandler(Handler):
 
 
 class CSVHandler(Handler):
-    pass
+    def __init__(self, filepath):
+        self.file_path = filepath
+        super(CSVHandler, self).__init__()
+
+    def _create_log_if_non_existent(self):
+        if (not os.path.exists(self.file_path) or os.path.getsize(
+                self.file_path) == 0):
+            with open(self.file_path, 'w', newline='', ) as f:
+                writer = csv.writer(f)
+                writer.writerow(['date', 'level', 'msg'])
+
+    def persist_log(self, entry: LogEntry):
+        pass
+
+    def retrieve_all_logs(self) -> List[LogEntry]:
+        pass
 
 
 class SQLiteHandler(Handler):
