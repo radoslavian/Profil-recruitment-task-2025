@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
-import datetime
-from modules.log_entry import LogEntry, LogLevelValue
+from modules.log_entry import LogEntry
 from typing import List, TextIO, Dict
 import os
 import json
