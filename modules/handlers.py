@@ -130,7 +130,7 @@ class CSVHandler(Handler):
                          log_entry["message"]]
         self._save_entry(log_entry_row)
 
-    def _save_entry(self, log_entry_row):
+    def _save_entry(self, log_entry_row: List[str]):
         with open(self.file_path, "a", newline="", ) as fh:
             writer = csv.writer(fh)
             writer.writerow(log_entry_row)
