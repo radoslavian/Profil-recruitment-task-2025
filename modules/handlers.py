@@ -8,7 +8,6 @@ from modules.log_entry import LogLevelValue, LogEntry
 
 
 class Handler(ABC):
-    @abstractmethod
     def __init__(self):
         self._create_log_if_non_existent()
 
