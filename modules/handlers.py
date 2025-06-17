@@ -117,14 +117,23 @@ class CSVHandler(Handler):
         super(CSVHandler, self).__init__()
 
     def _create_log_if_non_existent(self):
-        if (not os.path.exists(self.file_path) or os.path.getsize(
-                self.file_path) == 0):
-            with open(self.file_path, 'w', newline='', ) as f:
+        if not os.path.exists(self.file_path) or \
+           os.path.getsize(self.file_path) == 0:
+            with open(self.file_path, "w", newline="", ) as f:
                 writer = csv.writer(f)
-                writer.writerow(['date', 'level', 'message'])
+                writer.writerow(["date", "level", "message"])
 
     def persist_log(self, entry: LogEntry):
-        pass
+        log_entry = entry.to_dict()
+        log_entry_row = [log_entry["date"],
+                         log_entry["level"],
+                         log_entry["message"]]
+        self._save_entry(log_entry_row)
+
+    def _save_entry(self, log_entry_row):
+        with open(self.file_path, "a", newline="", ) as fh:
+            writer = csv.writer(fh)
+            writer.writerow(log_entry_row)
 
     def retrieve_all_logs(self) -> List[LogEntry]:
         pass

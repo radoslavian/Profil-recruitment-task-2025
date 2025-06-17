@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import patch, mock_open, MagicMock
 from modules.handlers import CSVHandler
+from .test_data import fake_log_entry
 
 
 @patch("builtins.open", new_callable=mock_open)
@@ -50,3 +51,29 @@ class LogFileAccessCreation(TestCase):
         self.writer_mock.assert_any_call(file_handle)
         self.writer_mock.return_value.writerow.assert_called_once_with(
             ["date", "level", "message"])
+
+
+class PersistingLogs(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.file_path = "/path/to/file.csv"
+        _, cls.log_entry = fake_log_entry()
+
+    def setUp(self):
+        self.writer_mock = MagicMock()
+        self.writer_mock.return_value.writerow = MagicMock()
+
+    @patch("builtins.open", new_callable=mock_open)
+    def test_persisting_log_entry(self, mock_open_file):
+        file_handle = mock_open_file()
+
+        with patch("csv.writer", new=self.writer_mock):
+            cvs_handler = CSVHandler(self.file_path)
+            cvs_handler.persist_log(self.log_entry)
+
+        mock_open_file.assert_any_call(self.file_path, "a", newline="")
+        self.writer_mock.assert_any_call(file_handle)
+        self.writer_mock.return_value.writerow.assert_any_call([
+            self.log_entry["date"],
+            self.log_entry["level"],
+            self.log_entry["message"]])
