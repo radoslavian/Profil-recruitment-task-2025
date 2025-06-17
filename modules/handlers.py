@@ -25,7 +25,7 @@ class Handler(ABC):
 
 
 class FileHandler(Handler):
-    def __init__(self, filename):
+    def __init__(self, filename: str):
         self.filename = filename
         super(FileHandler, self).__init__()
 
@@ -66,7 +66,7 @@ class FileHandler(Handler):
 
 
 class JsonHandler(Handler):
-    def __init__(self, filepath):
+    def __init__(self, filepath: str):
         self.filepath = filepath
         super(JsonHandler, self).__init__()
 
