@@ -77,3 +77,64 @@ class PersistingLogs(TestCase):
             self.log_entry["date"],
             self.log_entry["level"],
             self.log_entry["message"]])
+
+
+@patch("builtins.open", new_callable=mock_open)
+class LogRetrieval(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.file_path = "/path/to/file.cls"
+
+        number_of_entries = range(0, 2)
+        log_entries = [fake_log_entry() for i in number_of_entries]
+
+        # dictionaries from which fake entries had been created:
+        cls.log_entries_data = [log_entry[0] for log_entry in log_entries]
+
+        # actual fake LogEntry instances:
+        cls.log_entries = [log_entry[1] for log_entry in log_entries]
+
+    def setUp(self):
+        with patch("builtins.open", new_callable=mock_open):
+            self.csv_handler = CSVHandler(self.file_path)
+
+    def test_log_file_opening(self, open_file):
+        """
+        It should successfully open a log file for reading.
+        """
+        self.csv_handler.retrieve_all_logs()
+        open_file.assert_any_call(self.file_path, "r", newline="")
+
+    def test_reading_log(self, open_file):
+        """
+        It should successfully read log data from a log file.
+        """
+        # csv.DictReader - returns a generator object
+        # for reading log data sequentially
+        # (mocking the generator with a list of dictionaries should suffice).
+
+        file_handle = open_file()
+        with patch("csv.DictReader",
+                   return_value=self.log_entries_data) as mock_reader:
+            log_entries = self.csv_handler.retrieve_all_logs()
+
+        # comparing lists of string representations of LogEntry objects
+        expected_entries = [repr(entry) for entry in self.log_entries]
+        received_entries = [repr(entry) for entry in log_entries]
+
+        mock_reader.assert_any_call(file_handle)
+        self.assertListEqual(expected_entries, received_entries)
+
+    def test_file_not_found(self, *args):
+        """
+        It should return an empty list in case of failure to open the file.
+        """
+        # mocked 'open' callable should raise the FileNotFoundError
+        def fail_with_file_not_found(*args, **kwargs):
+            raise FileNotFoundError
+
+        with patch("builtins.open", new=fail_with_file_not_found):
+            log_entries = self.csv_handler.retrieve_all_logs()
+
+        self.assertFalse(log_entries)
+

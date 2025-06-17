@@ -136,7 +136,18 @@ class CSVHandler(Handler):
             writer.writerow(log_entry_row)
 
     def retrieve_all_logs(self) -> List[LogEntry]:
-        pass
+        try:
+            log_entries = self._load_entries()
+        except FileNotFoundError:
+            return []
+        return log_entries
+
+    def _load_entries(self) -> List[LogEntry]:
+        with open(self.file_path, 'r', newline='', ) as fh:
+            reader = csv.DictReader(fh)
+            log_entries = [LogEntry.from_dict(row) for row in reader]
+
+        return log_entries
 
 
 class SQLiteHandler(Handler):
