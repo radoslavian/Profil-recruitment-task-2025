@@ -1,9 +1,9 @@
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
 from modules.handlers import SQLiteHandler
-import re
 
 
+@patch("sqlite3.connect")
 class LogAccessCreation(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -18,23 +18,20 @@ class LogAccessCreation(TestCase):
                 )
         """
 
-    def test_connecting_to_database(self):
-        with patch("sqlite3.connect") as sqlite_connect:
-            SQLiteHandler(self.database_path)
-            sqlite_connect.assert_called_once_with(self.database_path)
+    def test_connecting_to_database(self, sqlite_connect):
+        SQLiteHandler(self.database_path)
+        sqlite_connect.assert_called_once_with(self.database_path)
 
-    def test_table_creation(self):
+    def test_table_creation(self, connect_mock):
         mock_cursor = MagicMock()
         mock_connection = MagicMock()
         mock_connection.cursor.return_value = mock_cursor
-        connect_mock = MagicMock()
         connect_mock.return_value.__enter__.return_value = mock_connection
 
-        expected_output = self.create_database_sql.replace(" ", "")
+        SQLiteHandler(self.database_path, self.table_name)
 
-        with patch("sqlite3.connect", connect_mock):
-            SQLiteHandler(self.database_path, self.table_name)
-            received_output = mock_cursor.executescript.call_args[0][0]\
-                .replace(" ", "")
+        expected_output = self.create_database_sql.replace(" ", "")
+        received_output = mock_cursor.executescript.call_args[0][0]\
+                                                   .replace(" ", "")
 
         self.assertEqual(expected_output, received_output)
