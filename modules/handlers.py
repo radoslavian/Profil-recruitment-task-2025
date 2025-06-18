@@ -173,7 +173,13 @@ class SQLiteHandler(Handler):
         return sqlite3.connect(self.db_path)
 
     def persist_log(self, entry: LogEntry):
-        pass
+        with self._get_conn() as conn:
+            cursor = conn.cursor()
+            sql_query = (f"INSERT INTO {self.table_name} (timestamp, "
+                         f"level, message) VALUES ('{entry.date}', "
+                         f"'{entry.level}', '{entry.message}')")
+
+            cursor.executescript(sql_query)
 
     def retrieve_all_logs(self) -> List[LogEntry]:
         pass
