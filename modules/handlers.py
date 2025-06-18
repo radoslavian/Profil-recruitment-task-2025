@@ -4,6 +4,7 @@ import datetime
 import os
 import json
 import csv
+import sqlite3
 from modules.log_entry import LogLevelValue, LogEntry
 
 
@@ -150,4 +151,29 @@ class CSVHandler(Handler):
 
 
 class SQLiteHandler(Handler):
-    pass
+    def __init__(self, database_path: str, table_name: str = "log"):
+        self.db_path = database_path
+        self.table_name = table_name
+        super(SQLiteHandler, self).__init__()
+
+    def _create_log_if_non_existent(self):
+        with self._get_conn() as connection:
+            cursor = connection.cursor()
+            create_table_sql = f'''
+                CREATE TABLE {self.table_name} (
+                    id INTEGER PRIMARY KEY,
+                    timestamp TEXT NOT NULL,
+                    level TEXT NOT NULL,
+                    message TEXT NOT NULL
+                )
+            '''
+            cursor.executescript(create_table_sql)
+
+    def _get_conn(self):
+        return sqlite3.connect(self.db_path)
+
+    def persist_log(self, entry: LogEntry):
+        pass
+
+    def retrieve_all_logs(self) -> List[LogEntry]:
+        pass
