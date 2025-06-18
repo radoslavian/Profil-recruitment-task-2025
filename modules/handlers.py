@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, TextIO, Dict
+from typing import List, Dict, Tuple, TextIO
 import datetime
 import os
 import json
@@ -182,4 +182,27 @@ class SQLiteHandler(Handler):
             cursor.executescript(sql_query)
 
     def retrieve_all_logs(self) -> List[LogEntry]:
-        pass
+        try:
+            log_entries = self._fetch_resulting_rows()
+        except (sqlite3.Error, ValueError):
+            return []
+        return log_entries
+
+    def _fetch_resulting_rows(self) -> List[LogEntry]:
+        retrieval_query = (f"SELECT timestamp, level, message FROM "
+                           f"{self.table_name} ORDER BY timestamp ASC")
+
+        with self._get_conn() as connection:
+            cursor = connection.cursor()
+            cursor.executescript(retrieval_query)
+            entry_rows = cursor.fetchall()
+
+        fetched_entries = self._fetch_log_entries(entry_rows)
+        return fetched_entries
+
+    def _fetch_log_entries(self,
+                           fetched_rows: List[Tuple]) -> List[LogEntry]:
+        return [LogEntry(date=datetime.datetime.fromisoformat(row[0]),
+                         level=LogLevelValue[row[1]],
+                         msg=row[2])
+                for row in fetched_rows]
