@@ -28,7 +28,8 @@ class LogEntryAttrEncapsulationConversion(TestCase):
 
     def test_encapsulation_reading(self):
         self.assertEqual(self.log_entry.level, self.log_level.name)
-        self.assertEqual(self.log_entry.date, self.date.isoformat())
+        self.assertEqual(self.log_entry.date.isoformat(),
+                         self.date.isoformat())
         self.assertEqual(self.log_entry.message, self.message)
 
     def test_encapsulation_writing(self):
@@ -52,7 +53,8 @@ class LogEntryAttrEncapsulationConversion(TestCase):
         """
         Representation should include iso-formatted date.
         """
-        self.assertIn(self.date.isoformat(), self.received_representation)
+        self.assertIn(self.date.isoformat(),
+                      self.received_representation)
 
     def test_log_level_name(self):
         """

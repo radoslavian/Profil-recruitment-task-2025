@@ -43,13 +43,13 @@ class LogEntry:
         return ["date", "level", "message"]
 
     def values(self) -> List[str]:
-        return [self.date, self.level, self.message]
+        return [self.date.isoformat(), self.level, self.message]
 
     def __repr__(self):
-        return f"LogEntry(date={self.date}, " \
+        return f"LogEntry(date={self['date']}, " \
             f"level='{self.level}', " \
             f"msg='{self.message}')"
 
-    date = property(lambda self: self._date.isoformat())
+    date = property(lambda self: self._date)
     level = property(lambda self: self._log_level.name)
     message = property(lambda self: self._message)
