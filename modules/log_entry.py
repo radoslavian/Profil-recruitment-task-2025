@@ -12,9 +12,6 @@ class LogLevelValue(Enum):
     CRITICAL = 4
 
 
-DEFAULT_LOG_LEVEL = LogLevelValue.DEBUG
-
-
 class LogEntry:
     def __init__(self,
                  date: datetime.datetime,
