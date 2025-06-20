@@ -1,5 +1,6 @@
 from unittest import TestCase
 import datetime
+import uuid
 from modules.log_entry import LogEntry, LogLevelValue
 
 
@@ -85,7 +86,20 @@ class LogEntryAttrEncapsulationConversion(TestCase):
 
     def test_dict_message(self):
         self.assertEqual(self.message, self.received_dict["message"])
-        
+
+    def test_log_uuid(self):
+        """
+        LogEntry should be identified by uuidv4 (for easier set creation).
+        """
+        entry_test = LogEntry(date=self.date,
+                              level=self.log_level,
+                              msg=self.message)
+        uuid_from_string = uuid.UUID(entry_test.uuid, version=4)
+
+        self.assertIs(type(entry_test.uuid), str)
+        self.assertIs(type(uuid_from_string), uuid.UUID)
+        self.assertNotEqual(self.log_entry.uuid, entry_test.uuid)
+
 
 class LogEntryFromDict(TestCase):
     """

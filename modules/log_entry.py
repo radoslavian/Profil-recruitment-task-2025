@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Dict, List
 from enum import Enum
 import datetime
+from uuid import uuid4
 
 
 class LogLevelValue(Enum):
@@ -20,6 +21,7 @@ class LogEntry:
         self._date = date
         self._log_level = level
         self._message = msg
+        self._uuid = uuid4()
 
     def to_dict(self) -> Dict:
         return dict(self)
@@ -41,6 +43,8 @@ class LogEntry:
 
     def values(self) -> List[str]:
         return [self.date.isoformat(), self.level, self.message]
+
+    uuid = property(lambda self: str(self._uuid))
 
     def __repr__(self):
         return f"LogEntry(date={self['date']}, " \
