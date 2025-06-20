@@ -55,8 +55,8 @@ class ProfilLoggerReader:
             start_date: Optional[datetime.datetime] = None,
             end_date: Optional[datetime.datetime] = None) -> List[LogEntry]:
         """
-        Returns entries logged between start_date (the start_date is
-        higher than) and end_date (the end_date is lower than).
+        Returns entries logged between start_date (the entry start_date is
+        higher than) and end_date (the entry end_date is lower than).
         """
         all_entries: List = self._get_all_logs_from_handler()
         entries_from_start_date: Set = set()
