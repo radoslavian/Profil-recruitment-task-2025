@@ -2,6 +2,7 @@ import datetime
 from typing import List, Dict, Set, Optional
 from modules.log_entry import LogEntry
 from modules.handlers import Handler
+import re
 
 
 class ProfilLoggerReader:
@@ -31,7 +32,27 @@ class ProfilLoggerReader:
             start_date: Optional[datetime.datetime] = None,
             end_date: Optional[datetime.datetime] = None) \
             -> List[LogEntry]:
-        pass
+        """
+        Find log entries by a regular expression, optionally filtering
+        them by dates.
+        """
+        try:
+            filtered_entries = self._filter_all_logs_by_date(
+                start_date, end_date)
+            result_entries = self._filter_entries_by_regex(
+                filtered_entries, regex)
+        except re.error:
+            return []
+
+        return result_entries
+
+    @staticmethod
+    def _filter_entries_by_regex(entries, regex: str):
+        pattern = re.compile(regex)
+        matching_logs = filter(
+            lambda entry: pattern.search(entry.message), entries)
+
+        return list(matching_logs)
 
     def groupby_level(
             self,
