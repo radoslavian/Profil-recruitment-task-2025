@@ -2,6 +2,7 @@ import datetime
 from typing import List, Dict, Set, Optional
 from modules.log_entry import LogEntry
 from modules.handlers import Handler
+from modules.log_entry import LogLevelValue
 import re
 
 
@@ -56,7 +57,7 @@ class ProfilLoggerReader:
             self,
             start_date: Optional[datetime.datetime] = None,
             end_date: Optional[datetime.datetime] = None) \
-            -> Dict[str, List[LogEntry]]:
+            -> Dict[LogLevelValue, List[LogEntry]]:
         pass
 
     def groupby_month(
