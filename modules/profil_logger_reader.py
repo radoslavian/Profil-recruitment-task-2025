@@ -30,8 +30,7 @@ class ProfilLoggerReader:
             self,
             regex: str,
             start_date: Optional[datetime.datetime] = None,
-            end_date: Optional[datetime.datetime] = None) \
-            -> List[LogEntry]:
+            end_date: Optional[datetime.datetime] = None) -> List[LogEntry]:
         """
         Find log entries by a regular expression, optionally filtering
         them by dates.
