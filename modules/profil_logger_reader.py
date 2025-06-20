@@ -36,9 +36,8 @@ class ProfilLoggerReader:
         Find log entries by a regular expression, optionally filtering
         them by dates.
         """
+        filtered_entries = self._filter_all_logs_by_date(start_date, end_date)
         try:
-            filtered_entries = self._filter_all_logs_by_date(
-                start_date, end_date)
             result_entries = self._filter_entries_by_regex(
                 filtered_entries, regex)
         except re.error:
