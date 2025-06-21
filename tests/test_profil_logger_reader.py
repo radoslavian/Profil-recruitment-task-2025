@@ -128,8 +128,8 @@ class RegexSearch(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.searched_expression = r"\,\s\w{5}\s"  # should capture 2 and 3
-        cls.start_date = datetime.datetime.fromisoformat('2003-10-22T10:49:46')
-        cls.end_date = datetime.datetime.fromisoformat('2017-03-17T08:54:58')
+        cls.start_date = datetime.datetime.fromisoformat('2003-10-22T10:49:47')
+        cls.end_date = datetime.datetime.fromisoformat('2017-03-17T08:54:57')
 
     setUp = patch("builtins.open")(setUpTestData)
 

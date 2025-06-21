@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Dict, Set, Iterable, Optional
+from typing import List, Dict, Optional
 from modules.log_entry import LogEntry
 from modules.handlers import Handler
 from modules.log_entry import LogLevelValue
@@ -98,36 +98,23 @@ class ProfilLoggerReader:
             start_date: Optional[datetime.datetime] = None,
             end_date: Optional[datetime.datetime] = None) -> List[LogEntry]:
         """
-        Returns entries logged between start_date (the entry start_date is
-        higher than) and end_date (the entry end_date is lower than).
+        Returns entries logged between start_date and end_date (including
+        entries logged exactly on those dates).
         """
-        all_entries: List = self._get_all_logs_from_handler()
-        entries_from_start_date: Set = set()
-        entries_before_end_date: Set = set()
-        entries_intersection: List = []
-
-        if start_date:
-            entries_from_start_date = {entry for entry in all_entries
-                                       if entry.date > start_date}
-
-        if end_date:
-            entries_before_end_date = {entry for entry in all_entries
-                                       if entry.date < end_date}
+        all_entries = self._get_all_logs_from_handler()
+        filtered_entries = []
 
         if start_date and end_date:
-            entries_intersection = self._sort_entries_by_date(
-                entries_from_start_date
-                & entries_before_end_date)
+            filtered_entries = [entry for entry in all_entries
+                                if start_date <= entry.date <= end_date]
+        elif start_date:
+            filtered_entries = [entry for entry in all_entries
+                                if entry.date >= start_date]
+        elif end_date:
+            filtered_entries = [entry for entry in all_entries
+                                if entry.date <= end_date]
 
-        if not any([entries_from_start_date, entries_before_end_date]) \
-           and any([start_date, end_date]):
+        if not filtered_entries and any([start_date, end_date]):
             all_entries = []
 
-        return (entries_intersection
-                or self._sort_entries_by_date(entries_from_start_date)
-                or self._sort_entries_by_date(entries_before_end_date)
-                or all_entries)
-
-    @staticmethod
-    def _sort_entries_by_date(entries: Iterable[LogEntry]) -> List[LogEntry]:
-        return sorted(entries, key=lambda entry: entry.date)
+        return filtered_entries or all_entries
