@@ -264,17 +264,27 @@ class GroupingByLevel(TestCase):
             LogLevelValue.DEBUG: [TestData.log_entries[2]]
         }
 
-        self.assertDictEqual(received_output, expected_output)
+        self.assertDictEqual(expected_output, received_output)
 
-    @skip("As the functionality already exists, will be written after"
-          " validating the library manually.")
     def test_start_date_only(self):
-        pass
+        start_date = datetime.datetime.fromisoformat("2014-12-10T09:37:54")
+        received_output = self.logger_reader.groupby_level(
+            start_date=start_date)
+        expected_output = {
+            LogLevelValue.ERROR: [TestData.log_entries[4]]
+        }
 
-    @skip("As the functionality already exists, will be written after"
-          " validating the library manually.")
+        self.assertDictEqual(expected_output, received_output)
+
     def test_end_date_only(self):
-        pass
+        end_date = datetime.datetime.fromisoformat("1995-12-28T03:32:42")
+        received_entries = self.logger_reader.groupby_level(
+            end_date=end_date)
+        expected_entries = {
+            LogLevelValue.DEBUG: [TestData.log_entries[0]]
+        }
+
+        self.assertDictEqual(expected_entries, received_entries)
 
 
 class GroupingByMonth(TestCase):
@@ -313,5 +323,17 @@ class GroupingByMonth(TestCase):
             "1996-12": self.log_entries[1:]
         }
         received_output = self.logger_reader.groupby_month()
+
+        self.assertDictEqual(expected_output, received_output)
+
+    def test_both_dates(self):
+        """
+        It should group entries by year-month with boundary dates.
+        """
+        start_date = datetime.datetime.fromisoformat("1994-10-02T07:38:07")
+        end_date = datetime.datetime.fromisoformat("1995-12-28T03:32:42")
+        expected_output = {"1994-10": [self.log_entries[0]]}
+        received_output = self.logger_reader.groupby_month(
+            start_date=start_date, end_date=end_date)
 
         self.assertDictEqual(expected_output, received_output)
