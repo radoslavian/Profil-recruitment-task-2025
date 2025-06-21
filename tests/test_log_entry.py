@@ -1,5 +1,5 @@
-from unittest import TestCase
 import datetime
+from unittest import TestCase
 from modules.log_entry import LogEntry, LogLevelValue
 
 
