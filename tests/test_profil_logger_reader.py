@@ -1,8 +1,8 @@
-from unittest import TestCase, skip
-from unittest.mock import patch, MagicMock
 import datetime
-from modules.log_entry import LogEntry, LogLevelValue
+from unittest import TestCase
+from unittest.mock import patch, MagicMock
 from modules.handlers import FileHandler
+from modules.log_entry import LogEntry, LogLevelValue
 from modules.profil_logger_reader import ProfilLoggerReader
 
 
