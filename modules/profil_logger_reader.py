@@ -46,7 +46,7 @@ class ProfilLoggerReader:
         return result_entries
 
     @staticmethod
-    def _filter_entries_by_regex(entries, regex: str):
+    def _filter_entries_by_regex(entries, regex: str) -> List[LogEntry]:
         pattern = re.compile(regex)
         matching_logs = filter(
             lambda entry: pattern.search(entry.message), entries)
