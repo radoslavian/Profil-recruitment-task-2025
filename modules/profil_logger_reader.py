@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Dict, Set, Optional
+from typing import List, Dict, Set, Collection, Optional
 from modules.log_entry import LogEntry
 from modules.handlers import Handler
 from modules.log_entry import LogLevelValue
@@ -103,10 +103,15 @@ class ProfilLoggerReader:
                                        if entry.date < end_date}
 
         if start_date and end_date:
-            entries_intersection = list(entries_from_start_date
-                                        & entries_before_end_date)
+            entries_intersection = self._sort_entries_by_date(
+                entries_from_start_date
+                & entries_before_end_date)
 
         return (entries_intersection
-                or list(entries_from_start_date)
-                or list(entries_before_end_date)
+                or self._sort_entries_by_date(entries_from_start_date)
+                or self._sort_entries_by_date(entries_before_end_date)
                 or all_entries)
+
+    @staticmethod
+    def _sort_entries_by_date(entries: Collection[LogEntry]) -> List[LogEntry]:
+        return sorted(entries, key=lambda entry: entry.date)
