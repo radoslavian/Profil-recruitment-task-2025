@@ -86,31 +86,35 @@ class TextSearch(TestCase):
         It should search for entries by a text input and return entries
         logged between the start_date and the end_date.
         """
+        searched_text = "vex"
+        expected_number_of_entries = 1
         start_date = datetime.datetime.fromisoformat("1996-12-28T03:32:42")
         end_date = datetime.datetime.fromisoformat("2013-12-10T09:37:54")
-        searched_text = "vex"
 
         found_entries = self.logger_reader.find_by_text(
             searched_text, start_date=start_date, end_date=end_date)
-
-        expected_number_of_entries = 1
-        received_entries = {repr(entry) for entry in found_entries}
-        expected_entries = {repr(TestData.log_entries[2])}
+        expected_entries = [TestData.log_entries[2]]
 
         self.mock_retrieve_all_logs.assert_called_once()
         self.assertEqual(expected_number_of_entries, len(found_entries))
-        self.assertSetEqual(expected_entries, received_entries)
+        self.assertListEqual(expected_entries, found_entries)
 
     def test_start_date_only(self):
         """
         It should search for entries logged after the start_date.
         """
-        pass
+        searched_text = "MTV"
+        start_date = datetime.datetime.fromisoformat("1994-11-02T07:38:07")
+        found_entries = self.logger_reader.find_by_text(
+            searched_text, start_date=start_date)
+        expected_entries = [TestData.log_entries[1]]
+
+        self.assertListEqual(expected_entries, found_entries)
 
     @skip("Will be written after the tested class is completed.")
     def test_end_date_only(self):
         """
-        It should search for entries logged after the end_date.
+        It should search for entries logged before the end_date.
         """
         pass
 
