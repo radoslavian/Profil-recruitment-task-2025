@@ -337,3 +337,20 @@ class GroupingByMonth(TestCase):
             start_date=start_date, end_date=end_date)
 
         self.assertDictEqual(expected_output, received_output)
+
+    def test_start_date(self):
+        """
+        It should group entries by year-month with start_date only.
+        """
+        start_date = datetime.datetime.fromisoformat("1996-12-28T03:32:42")
+        expected_output = {"1996-12": [self.log_entries[1]]}
+        received_output = self.logger_reader.groupby_month(
+            start_date=start_date)
+
+        self.assertDictEqual(expected_output, received_output)
+
+    def test_end_date(self):
+        """
+        It should group entries by year-month with end_date only.
+        """
+        pass
