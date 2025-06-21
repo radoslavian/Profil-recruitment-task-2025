@@ -63,10 +63,13 @@ class ProfilLoggerReader:
         logging levels.
         """
         log_entries = self._filter_all_logs_by_date(start_date, end_date)
-        entry_levels = {entry.level for entry in log_entries}
+        grouped_entries: Dict = {level: [entry for entry in log_entries
+                                         if entry.level == level]
+                                 for level in LogLevelValue}
+        filtered_levels = filter(lambda level:
+                                 grouped_entries[level], grouped_entries)
 
-        return {level: [entry for entry in log_entries if entry.level == level]
-                for level in entry_levels}
+        return {level: grouped_entries[level] for level in filtered_levels}
 
     def groupby_month(
             self,
