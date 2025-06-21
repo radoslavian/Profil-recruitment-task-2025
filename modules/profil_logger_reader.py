@@ -58,7 +58,15 @@ class ProfilLoggerReader:
             start_date: Optional[datetime.datetime] = None,
             end_date: Optional[datetime.datetime] = None) \
             -> Dict[LogLevelValue, List[LogEntry]]:
-        pass
+        """
+        Group log entries from an optionally given time period by
+        logging levels.
+        """
+        log_entries = self._filter_all_logs_by_date(start_date, end_date)
+        entry_levels = {entry.level for entry in log_entries}
+
+        return {level: [entry for entry in log_entries if entry.level == level]
+                for level in entry_levels}
 
     def groupby_month(
             self,
