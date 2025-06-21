@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import patch, mock_open, MagicMock
 import json
 from modules.handlers import JsonHandler
-from .test_data import log_entry, fake_log_entry
+from .fake_data import log_entry, fake_log_entry
 
 
 @patch("builtins.open", new_callable=mock_open)

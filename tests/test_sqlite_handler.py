@@ -5,7 +5,7 @@ import sqlite3
 import datetime
 from modules.handlers import SQLiteHandler
 from modules.log_entry import LogEntry, LogLevelValue
-from .test_data import fake_log_entry
+from .fake_data import fake_log_entry
 
 
 @patch("sqlite3.connect")

@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import patch, mock_open, MagicMock
-from .test_data import fake_log_entry
+from .fake_data import fake_log_entry
 from modules.handlers import CSVHandler
 
 

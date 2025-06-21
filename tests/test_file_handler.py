@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import patch, mock_open
 from modules.handlers import FileHandler
 from modules.log_entry import LogEntry
-from .test_data import log_entry
+from .fake_data import log_entry
 
 
 @patch("builtins.open", new_callable=mock_open)
