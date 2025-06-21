@@ -250,13 +250,21 @@ class GroupingByLevel(TestCase):
 
         self.assertDictEqual(expected_output, received_output)
 
-    @skip("As the functionality already exists, will be written after"
-          " validating the library manually.")
     def test_start_date_end_date(self):
         """
         It should group log entries from a given time period by logging levels.
         """
-        pass
+        start_date = datetime.datetime.fromisoformat(
+            "1997-12-28T03:32:43")
+        end_date = datetime.datetime.fromisoformat(
+            "2012-12-10T09:37:54")
+        received_output = self.logger_reader.groupby_level(
+            start_date=start_date, end_date=end_date)
+        expected_output = {
+            LogLevelValue.DEBUG: [TestData.log_entries[2]]
+        }
+
+        self.assertDictEqual(received_output, expected_output)
 
     @skip("As the functionality already exists, will be written after"
           " validating the library manually.")
