@@ -1,10 +1,10 @@
+import csv
+import datetime
+import json
+import os
+import sqlite3
 from abc import ABC, abstractmethod
 from typing import List, Dict, Tuple, TextIO
-import datetime
-import os
-import json
-import csv
-import sqlite3
 from modules.log_entry import LogLevelValue, LogEntry
 
 
