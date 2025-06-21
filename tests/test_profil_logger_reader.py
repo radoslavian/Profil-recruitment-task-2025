@@ -174,12 +174,18 @@ class RegexSearch(TestCase):
 
         self.assertFalse(found_entries)
 
-    @skip("Will be written after the tested class is completed.")
     def test_start_date_only(self):
         """
         It should search for entries logged after the start_date.
         """
-        pass
+        found_entries = self.logger_reader.find_by_regex(
+            self.searched_expression, start_date=self.start_date)
+
+        expected_number_of_entries = 1
+        expected_entries = [TestData.log_entries[3]]
+
+        self.assertEqual(expected_number_of_entries, len(found_entries))
+        self.assertListEqual(expected_entries, found_entries)
 
     def test_end_date_only(self):
         """
