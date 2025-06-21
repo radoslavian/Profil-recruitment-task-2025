@@ -353,4 +353,9 @@ class GroupingByMonth(TestCase):
         """
         It should group entries by year-month with end_date only.
         """
-        pass
+        end_date = datetime.datetime.fromisoformat("1996-12-21T04:31:26")
+        expected_output = {"1994-10": [self.log_entries[0]]}
+        received_output = self.logger_reader.groupby_month(
+            end_date=end_date)
+
+        self.assertDictEqual(expected_output, received_output)
