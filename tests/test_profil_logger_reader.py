@@ -148,13 +148,12 @@ class RegexSearch(TestCase):
         found_entries = self.logger_reader.find_by_regex(
             self.searched_expression)
         expected_number_of_entries = 2
-        received_entries = {repr(entry) for entry in found_entries}
-        expected_entries = {repr(entry)
-                            for entry in (TestData.log_entries[2],
-                                          TestData.log_entries[3],)}
+        received_entries = [entry for entry in found_entries]
+        expected_entries = [entry for entry in (TestData.log_entries[2],
+                                                TestData.log_entries[3],)]
 
         self.assertEqual(expected_number_of_entries, len(found_entries))
-        self.assertSetEqual(expected_entries, received_entries)
+        self.assertListEqual(expected_entries, received_entries)
 
     def test_start_date_end_date(self):
         found_entries = self.logger_reader.find_by_regex(
