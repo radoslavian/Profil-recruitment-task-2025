@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import Dict, List
-from enum import Enum
 import datetime
+from enum import Enum
+from typing import Dict, List
 
 
 class LogLevelValue(Enum):
