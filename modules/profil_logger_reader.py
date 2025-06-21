@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Dict, Set, Collection, Optional
+from typing import List, Dict, Set, Iterable, Optional
 from modules.log_entry import LogEntry
 from modules.handlers import Handler
 from modules.log_entry import LogLevelValue
@@ -113,5 +113,5 @@ class ProfilLoggerReader:
                 or all_entries)
 
     @staticmethod
-    def _sort_entries_by_date(entries: Collection[LogEntry]) -> List[LogEntry]:
+    def _sort_entries_by_date(entries: Iterable[LogEntry]) -> List[LogEntry]:
         return sorted(entries, key=lambda entry: entry.date)
