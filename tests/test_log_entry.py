@@ -27,7 +27,7 @@ class LogEntryAttrEncapsulationConversion(TestCase):
         cls.received_dict = cls.log_entry.to_dict()
 
     def test_encapsulation_reading(self):
-        self.assertEqual(self.log_entry.level, self.log_level.name)
+        self.assertEqual(self.log_entry.level, self.log_level)
         self.assertEqual(self.log_entry.date.isoformat(),
                          self.date.isoformat())
         self.assertEqual(self.log_entry.message, self.message)
