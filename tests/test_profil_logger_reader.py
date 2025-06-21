@@ -111,12 +111,17 @@ class TextSearch(TestCase):
 
         self.assertListEqual(expected_entries, found_entries)
 
-    @skip("Will be written after the tested class is completed.")
     def test_end_date_only(self):
         """
         It should search for entries logged before the end_date.
         """
-        pass
+        searched_text = "jump"
+        end_date = datetime.datetime.fromisoformat("2014-11-17T09:27:51")
+        expected_output = [TestData.log_entries[3]]
+        found_entries = self.logger_reader.find_by_text(
+            searched_text, end_date=end_date)
+
+        self.assertListEqual(expected_output, found_entries)
 
 
 class RegexSearch(TestCase):
