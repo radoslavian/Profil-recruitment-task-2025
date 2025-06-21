@@ -1,10 +1,10 @@
+import datetime
+from typing import Callable
 from unittest import TestCase
 from unittest.mock import patch, MagicMock
-from typing import Callable
-from modules.log_entry import LogEntry, LogLevelValue
-from modules.handlers import FileHandler, JsonHandler
-import datetime
 from modules import profil_logger
+from modules.handlers import FileHandler, JsonHandler
+from modules.log_entry import LogEntry, LogLevelValue
 from modules.profil_logger import ProfilLogger
 
 
