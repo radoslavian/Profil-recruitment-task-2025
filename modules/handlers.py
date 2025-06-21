@@ -20,7 +20,6 @@ class Handler(ABC):
     def retrieve_all_logs(self) -> List[LogEntry]:
         pass
 
-    @abstractmethod
     def _create_log_if_non_existent(self):
         pass
 
