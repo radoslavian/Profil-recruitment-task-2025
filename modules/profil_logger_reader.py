@@ -66,17 +66,29 @@ class ProfilLoggerReader:
         grouped_entries: Dict = {level: [entry for entry in log_entries
                                          if entry.level == level]
                                  for level in LogLevelValue}
-        filtered_levels = filter(lambda level:
-                                 grouped_entries[level], grouped_entries)
 
-        return {level: grouped_entries[level] for level in filtered_levels}
+        return {level: entries for level, entries
+                in grouped_entries.items() if entries}
 
     def groupby_month(
             self,
             start_date: Optional[datetime.datetime] = None,
             end_date: Optional[datetime.datetime] = None) \
             -> Dict[str, List[LogEntry]]:
-        pass
+        """
+        Group log entries in a dictionary by 'year-month' keys.
+        """
+        entries_filtered_by_date = self._filter_all_logs_by_date(
+            start_date, end_date)
+        year_month_keys = {entry.date.strftime("%Y-%m")
+                           for entry in entries_filtered_by_date}
+        entries_by_year_month = {
+            year_month_key: [entry for entry
+                             in entries_filtered_by_date
+                             if entry.date.strftime("%Y-%m") == year_month_key]
+            for year_month_key in year_month_keys
+        }
+        return entries_by_year_month
 
     def _get_all_logs_from_handler(self) -> List[LogEntry]:
         return self._handler.retrieve_all_logs()
