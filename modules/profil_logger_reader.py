@@ -92,7 +92,7 @@ class ProfilLoggerReader:
         all_entries: List = self._get_all_logs_from_handler()
         entries_from_start_date: Set = set()
         entries_before_end_date: Set = set()
-        entries_union: List = []
+        entries_intersection: List = []
 
         if start_date:
             entries_from_start_date = {entry for entry in all_entries
@@ -103,11 +103,10 @@ class ProfilLoggerReader:
                                        if entry.date < end_date}
 
         if start_date and end_date:
-            entries_union_set = (entries_from_start_date
-                                 & entries_before_end_date)
-            entries_union = list(entries_union_set)
+            entries_intersection = list(entries_from_start_date
+                                        & entries_before_end_date)
 
-        return (entries_union
+        return (entries_intersection
                 or list(entries_from_start_date)
                 or list(entries_before_end_date)
                 or all_entries)
