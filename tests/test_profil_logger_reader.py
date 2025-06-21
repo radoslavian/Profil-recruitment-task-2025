@@ -159,11 +159,10 @@ class RegexSearch(TestCase):
         found_entries = self.logger_reader.find_by_regex(
             self.searched_expression, self.start_date, self.end_date)
         expected_number_of_entries = 1
-        received_entry = repr(found_entries[0])
-        expected_entry = repr(TestData.log_entries[3])
+        expected_entries = [TestData.log_entries[3]]
 
         self.assertEqual(expected_number_of_entries, len(found_entries))
-        self.assertEqual(expected_entry, received_entry)
+        self.assertListEqual(expected_entries, found_entries)
 
     def test_exception(self):
         """
