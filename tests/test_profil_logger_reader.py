@@ -181,12 +181,41 @@ class RegexSearch(TestCase):
         """
         pass
 
-    @skip("Will be written after the tested class is completed.")
     def test_end_date_only(self):
         """
-        It should search for entries logged after the end_date.
+        It should search for entries logged before the end_date.
         """
-        pass
+        searched_pattern = "[A-Z]{3}"
+        end_date = datetime.datetime.fromisoformat("1995-12-28T03:32:42")
+        expected_entries = [TestData.log_entries[0]]
+        expected_number_of_entries = 1
+        found_entries = self.logger_reader.find_by_regex(
+            searched_pattern, end_date=end_date)
+
+        self.assertEqual(expected_number_of_entries, len(found_entries))
+        self.assertListEqual(expected_entries, found_entries)
+
+    def test_end_date_only_no_entries(self):
+        """
+        It should return no entries if nothing was logged before the end_date.
+        """
+        searched_pattern = "[A-Z]{3}"
+        end_date = datetime.datetime.fromisoformat("1990-12-28T03:32:42")
+        found_entries = self.logger_reader.find_by_regex(
+            searched_pattern, end_date=end_date)
+
+        self.assertFalse(found_entries)
+
+    def test_start_date_no_entries(self):
+        """
+        It should return no entries if nothing was logged after the start_date.
+        """
+        searched_pattern = "[A-Z]{3}"
+        start_date = datetime.datetime.fromisoformat("2030-12-28T03:32:42")
+        found_entries = self.logger_reader.find_by_regex(
+            searched_pattern, start_date=start_date)
+
+        self.assertFalse(found_entries)
 
 
 class GroupingByLevel(TestCase):

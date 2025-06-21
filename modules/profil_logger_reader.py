@@ -119,6 +119,10 @@ class ProfilLoggerReader:
                 entries_from_start_date
                 & entries_before_end_date)
 
+        if not any([entries_from_start_date, entries_before_end_date]) \
+           and any([start_date, end_date]):
+            all_entries = []
+
         return (entries_intersection
                 or self._sort_entries_by_date(entries_from_start_date)
                 or self._sort_entries_by_date(entries_before_end_date)
