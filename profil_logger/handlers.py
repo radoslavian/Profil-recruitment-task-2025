@@ -168,9 +168,6 @@ class SQLiteHandler(Handler):
             '''
             cursor.executescript(create_table_sql)
 
-    def _get_conn(self):
-        return sqlite3.connect(self.db_path)
-
     def persist_log(self, entry: LogEntry):
         with self._get_conn() as conn:
             cursor = conn.cursor()
@@ -186,6 +183,9 @@ class SQLiteHandler(Handler):
         except (sqlite3.Error, ValueError):
             return []
         return log_entries
+
+    def _get_conn(self):
+        return sqlite3.connect(self.db_path)
 
     def _fetch_resulting_rows(self) -> List[LogEntry]:
         retrieval_statement = (f"SELECT timestamp, level, message FROM "
