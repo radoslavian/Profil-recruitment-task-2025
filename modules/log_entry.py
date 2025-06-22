@@ -21,7 +21,7 @@ class LogEntry:
         self._log_level = level
         self._message = msg
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Dict[str, str]:
         return dict(self)
 
     @staticmethod
