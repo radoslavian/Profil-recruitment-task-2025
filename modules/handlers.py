@@ -25,23 +25,23 @@ class Handler(ABC):
 
 
 class FileHandler(Handler):
-    def __init__(self, filename: str):
-        self.filename = filename
+    def __init__(self, filepath: str):
+        self.filepath = filepath
         super(FileHandler, self).__init__()
 
     def _create_log_if_non_existent(self):
-        if not os.path.exists(self.filename):
-            with open(self.filename, "w") as f:
+        if not os.path.exists(self.filepath):
+            with open(self.filepath, "w") as f:
                 f.write("")
 
     def persist_log(self, entry: LogEntry):
         log_line = f"{entry.date} {entry.level} {entry.message}\n"
-        with open(self.filename, "a") as f:
+        with open(self.filepath, "a") as f:
             f.write(log_line)
 
     def retrieve_all_logs(self) -> List[LogEntry]:
         try:
-            with open(self.filename, "r") as file_handle:
+            with open(self.filepath, "r") as file_handle:
                 log_entries = self._read_entries_from_file(file_handle)
         except (FileNotFoundError, ValueError):
             return []
@@ -112,13 +112,13 @@ class JsonHandler(Handler):
 
 class CSVHandler(Handler):
     def __init__(self, filepath: str):
-        self.file_path = filepath
+        self.filepath = filepath
         super(CSVHandler, self).__init__()
 
     def _create_log_if_non_existent(self):
-        if not os.path.exists(self.file_path) or \
-           os.path.getsize(self.file_path) == 0:
-            with open(self.file_path, "w", newline="", ) as f:
+        if not os.path.exists(self.filepath) or \
+           os.path.getsize(self.filepath) == 0:
+            with open(self.filepath, "w", newline="", ) as f:
                 writer = csv.writer(f)
                 writer.writerow(["date", "level", "message"])
 
@@ -130,7 +130,7 @@ class CSVHandler(Handler):
         self._save_entry(log_entry_row)
 
     def _save_entry(self, log_entry_row: List[str]):
-        with open(self.file_path, "a", newline="", ) as fh:
+        with open(self.filepath, "a", newline="", ) as fh:
             writer = csv.writer(fh)
             writer.writerow(log_entry_row)
 
@@ -142,7 +142,7 @@ class CSVHandler(Handler):
         return log_entries
 
     def _load_entries(self) -> List[LogEntry]:
-        with open(self.file_path, 'r', newline='', ) as fh:
+        with open(self.filepath, 'r', newline='', ) as fh:
             reader = csv.DictReader(fh)
             log_entries = [LogEntry.from_dict(row) for row in reader]
 
