@@ -3,8 +3,8 @@ import sqlite3
 from typing import List, Tuple
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
-from .fake_data import fake_log_entry
 from profil_logger import LogEntry, LogLevelValue, SQLiteHandler
+from tests.fake_data import fake_log_entry
 
 
 @patch("sqlite3.connect")
