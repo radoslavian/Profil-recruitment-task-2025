@@ -9,15 +9,26 @@ from profil_logger.log_entry import LogEntry, LogLevelValue
 
 
 class Handler(ABC):
+    """
+    Base-abstract class for creating handlers for managing
+    logs (creating log backends and storing, retrieving entries).
+    """
     def __init__(self):
         self._create_log_if_non_existent()
 
     @abstractmethod
     def persist_log(self, entry: LogEntry):
+        """
+        Persists an entry to a permament storage.
+        """
         pass
 
     @abstractmethod
     def retrieve_all_logs(self) -> List[LogEntry]:
+        """
+        Read log entries from storage for further processing
+        and/or browsing.
+        """
         pass
 
     def _create_log_if_non_existent(self):
@@ -37,6 +48,9 @@ class FileIOHandler(Handler):
 
 
 class FileHandler(FileIOHandler):
+    """
+    Manages log entries in file-based storage.
+    """
     def _create_log_if_non_existent(self):
         if not os.path.exists(self.filepath):
             with self._get_file_handle("w") as fh:
@@ -74,6 +88,9 @@ class FileHandler(FileIOHandler):
 
 
 class JsonHandler(FileIOHandler):
+    """
+    Manages log entries in json-file based storage.
+    """
     def _create_log_if_non_existent(self):
         if not os.path.exists(self.filepath):
             with self._get_file_handle("w") as fh:
@@ -115,6 +132,9 @@ class JsonHandler(FileIOHandler):
 
 
 class CSVHandler(FileIOHandler):
+    """
+    Manages log entries in csv-file based storage.
+    """
     def _create_log_if_non_existent(self):
         if not os.path.exists(self.filepath) or \
            os.path.getsize(self.filepath) == 0:
@@ -150,6 +170,9 @@ class CSVHandler(FileIOHandler):
 
 
 class SQLiteHandler(Handler):
+    """
+    Manages log entries in SQLite database table storage.
+    """
     def __init__(self, database_path: str, table_name: str = "log"):
         self.db_path = database_path
         self.table_name = table_name
