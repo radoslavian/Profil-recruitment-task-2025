@@ -24,8 +24,8 @@ class ProfilLoggerReader:
 
     @staticmethod
     def _filter_entries_by_text(
-            logs: List[LogEntry], text: str) -> List[LogEntry]:
-        return [log for log in logs if text in log.message]
+            log_entries: List[LogEntry], text: str) -> List[LogEntry]:
+        return [log for log in log_entries if text in log.message]
 
     def find_by_regex(
             self,
