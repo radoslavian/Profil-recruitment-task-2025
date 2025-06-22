@@ -169,13 +169,19 @@ class SQLiteHandler(Handler):
             cursor.executescript(create_table_sql)
 
     def persist_log(self, entry: LogEntry):
+        entry_fields = {
+            "timestamp": entry["date"],
+            "level": entry["level"],
+            "message": entry["message"]
+        }
+
         with self._get_conn() as conn:
             cursor = conn.cursor()
-            sql_query = (f"INSERT INTO {self.table_name} (timestamp, "
-                         f"level, message) VALUES ('{entry['date']}', "
-                         f"'{entry['level']}', '{entry['message']}')")
+            sql_statement = (f"INSERT INTO {self.table_name} (timestamp, "
+                             "level, message) VALUES "
+                             "(:timestamp, :level, :message)")
 
-            cursor.executescript(sql_query)
+            cursor.execute(sql_statement, entry_fields)
 
     def retrieve_all_logs(self) -> List[LogEntry]:
         try:

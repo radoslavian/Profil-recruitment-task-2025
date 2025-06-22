@@ -21,10 +21,15 @@ class LogHandler(TestCase):
                     message TEXT NOT NULL
                 )
         """
-        cls.add_row_sql = ("INSERT INTO {table_name} (timestamp, level, "
-                           "message) VALUES ('{entry[date]}', "
-                           "'{entry[level]}', '{entry[message]}')")
+        cls.add_row_sql = (f"INSERT INTO {cls.table_name} (timestamp, level, "
+                           "message) VALUES "
+                           "(:timestamp, :level, :message)")
         _, cls.log_entry = fake_log_entry()
+        cls.add_row_parameter = {
+            "timestamp": cls.log_entry["date"],
+            "level": cls.log_entry["level"],
+            "message": cls.log_entry["message"]
+        }
 
     def test_connecting_to_database(self, sqlite_connect):
         SQLiteHandler(self.database_path)
@@ -48,9 +53,8 @@ class LogHandler(TestCase):
         sqlite_handler = SQLiteHandler(self.database_path, self.table_name)
         sqlite_handler.persist_log(self.log_entry)
 
-        expected_output = self.add_row_sql.format(table_name=self.table_name,
-                                                  entry=self.log_entry)
-        mock_cursor.executescript.assert_any_call(expected_output)
+        mock_cursor.execute.assert_any_call(
+            self.add_row_sql, self.add_row_parameter)
 
 
 class LogRetrieval(TestCase):
