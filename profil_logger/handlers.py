@@ -188,12 +188,12 @@ class SQLiteHandler(Handler):
         return log_entries
 
     def _fetch_resulting_rows(self) -> List[LogEntry]:
-        retrieval_query = (f"SELECT timestamp, level, message FROM "
-                           f"{self.table_name} ORDER BY timestamp ASC")
+        retrieval_statement = (f"SELECT timestamp, level, message FROM "
+                               f"{self.table_name} ORDER BY timestamp ASC")
 
         with self._get_conn() as connection:
             cursor = connection.cursor()
-            cursor.execute(retrieval_query)
+            cursor.execute(retrieval_statement)
             entry_rows = cursor.fetchall()
 
         fetched_entries = self._fetch_log_entries(entry_rows)
