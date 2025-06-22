@@ -10,7 +10,7 @@ DEFAULT_LOG_LEVEL = LogLevelValue.DEBUG
 class ProfilLogger:
     def __init__(self, log_handlers: List[Handler]):
         self.log_handlers = log_handlers
-        self.current_log_level: LogLevelValue = DEFAULT_LOG_LEVEL
+        self._current_log_level: LogLevelValue = DEFAULT_LOG_LEVEL
 
     def debug(self, message: str):
         self._log(LogLevelValue.DEBUG, message)
@@ -28,7 +28,7 @@ class ProfilLogger:
         self._log(LogLevelValue.CRITICAL, message)
 
     def set_log_level(self, log_level: LogLevelValue):
-        self.current_log_level = log_level
+        self._current_log_level = log_level
 
     def _log(self, log_level: LogLevelValue, message: str):
         if self._log_level_lower_than_current(log_level):
@@ -39,7 +39,7 @@ class ProfilLogger:
         self._write_to_handlers(entry)
 
     def _log_level_lower_than_current(self, log_level: LogLevelValue) -> bool:
-        return log_level.value < self.current_log_level.value
+        return log_level.value < self._current_log_level.value
 
     def _write_to_handlers(self, entry: LogEntry):
         for log_handler in self.log_handlers:
