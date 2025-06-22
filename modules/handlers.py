@@ -4,7 +4,7 @@ import json
 import os
 import sqlite3
 from abc import ABC, abstractmethod
-from typing import List, Dict, Tuple, TextIO
+from typing import List, Dict, Tuple, TextIO, IO
 from modules.log_entry import LogLevelValue, LogEntry
 
 
@@ -24,25 +24,33 @@ class Handler(ABC):
         pass
 
 
-class FileHandler(Handler):
+class FileIOHandler(Handler):
+    """
+    Generic class for inheriting classes using file input-output.
+    """
     def __init__(self, filepath: str):
         self.filepath = filepath
-        super(FileHandler, self).__init__()
+        super(FileIOHandler, self).__init__()
 
+    def _get_file_handle(self, mode: str, **kwargs) -> IO:
+        return open(self.filepath, mode, **kwargs)
+
+
+class FileHandler(FileIOHandler):
     def _create_log_if_non_existent(self):
         if not os.path.exists(self.filepath):
-            with open(self.filepath, "w") as f:
-                f.write("")
+            with self._get_file_handle("w") as fh:
+                fh.write("")
 
     def persist_log(self, entry: LogEntry):
         log_line = f"{entry.date} {entry.level} {entry.message}\n"
-        with open(self.filepath, "a") as f:
-            f.write(log_line)
+        with self._get_file_handle("a") as fh:
+            fh.write(log_line)
 
     def retrieve_all_logs(self) -> List[LogEntry]:
         try:
-            with open(self.filepath, "r") as file_handle:
-                log_entries = self._read_entries_from_file(file_handle)
+            with self._get_file_handle("r") as fh:
+                log_entries = self._read_entries_from_file(fh)
         except (FileNotFoundError, ValueError):
             return []
         return log_entries
@@ -65,15 +73,11 @@ class FileHandler(Handler):
         return log_entry
 
 
-class JsonHandler(Handler):
-    def __init__(self, filepath: str):
-        self.filepath = filepath
-        super(JsonHandler, self).__init__()
-
+class JsonHandler(FileIOHandler):
     def _create_log_if_non_existent(self):
         if not os.path.exists(self.filepath):
-            with open(self.filepath, "w") as file_in:
-                json.dump([], file_in)
+            with self._get_file_handle("w") as fh:
+                json.dump([], fh)
 
     def persist_log(self, entry: LogEntry):
         log_entries = []
@@ -86,12 +90,12 @@ class JsonHandler(Handler):
         self._save_entries(log_entries)
 
     def _save_entries(self, log_entries: List[Dict]):
-        with open(self.filepath, 'w', ) as f_out:
-            json.dump(log_entries, f_out, indent=4)
+        with self._get_file_handle("w") as fh:
+            json.dump(log_entries, fh, indent=4)
 
     def _load_entries(self):
-        with open(self.filepath, "r") as f_in:
-            return json.load(f_in)
+        with self._get_file_handle("r") as fh:
+            return json.load(fh)
 
     def _nonempty_file_exists(self) -> bool:
         return (os.path.exists(self.filepath)
@@ -100,8 +104,8 @@ class JsonHandler(Handler):
     def retrieve_all_logs(self) -> List[LogEntry]:
         log_entries = []
         try:
-            with open(self.filepath, "r") as file_in:
-                loaded_log_entries = json.load(file_in)
+            with self._get_file_handle("r") as fh:
+                loaded_log_entries = json.load(fh)
                 for entry in loaded_log_entries:
                     log_entry = LogEntry.from_dict(entry)
                     log_entries.append(log_entry)
@@ -110,16 +114,12 @@ class JsonHandler(Handler):
         return log_entries
 
 
-class CSVHandler(Handler):
-    def __init__(self, filepath: str):
-        self.filepath = filepath
-        super(CSVHandler, self).__init__()
-
+class CSVHandler(FileIOHandler):
     def _create_log_if_non_existent(self):
         if not os.path.exists(self.filepath) or \
            os.path.getsize(self.filepath) == 0:
-            with open(self.filepath, "w", newline="", ) as f:
-                writer = csv.writer(f)
+            with self._get_file_handle("w", newline="") as fh:
+                writer = csv.writer(fh)
                 writer.writerow(["date", "level", "message"])
 
     def persist_log(self, entry: LogEntry):
@@ -130,7 +130,7 @@ class CSVHandler(Handler):
         self._save_entry(log_entry_row)
 
     def _save_entry(self, log_entry_row: List[str]):
-        with open(self.filepath, "a", newline="", ) as fh:
+        with self._get_file_handle("a", newline="") as fh:
             writer = csv.writer(fh)
             writer.writerow(log_entry_row)
 
@@ -142,7 +142,7 @@ class CSVHandler(Handler):
         return log_entries
 
     def _load_entries(self) -> List[LogEntry]:
-        with open(self.filepath, 'r', newline='', ) as fh:
+        with self._get_file_handle("r", newline='') as fh:
             reader = csv.DictReader(fh)
             log_entries = [LogEntry.from_dict(row) for row in reader]
 
