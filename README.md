@@ -3,7 +3,7 @@ The library was written and tested with Python 3.12.1.
 
 ## Tests
 The unit tests were written using the PyUnit library. To run them, in the project directory
-execute the command:
+(i.e. the directory where this README.md file is located) execute the command:
 ```
 [profil_recruitment_task_2025]$ python3 -m unittest discover
 ```
