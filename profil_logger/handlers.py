@@ -193,7 +193,7 @@ class SQLiteHandler(Handler):
 
         with self._get_conn() as connection:
             cursor = connection.cursor()
-            cursor.executescript(retrieval_query)
+            cursor.execute(retrieval_query)
             entry_rows = cursor.fetchall()
 
         fetched_entries = self._fetch_log_entries(entry_rows)

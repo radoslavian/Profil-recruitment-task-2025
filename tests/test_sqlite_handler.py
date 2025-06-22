@@ -78,7 +78,7 @@ class LogRetrieval(TestCase):
         """
         It should dispatch a query for logs retrieval.
         """
-        self.mock_cursor.executescript.assert_any_call(
+        self.mock_cursor.execute.assert_any_call(
             self.logs_retrival_query)
 
     def test_log_entries(self):
@@ -128,7 +128,7 @@ class LogRetrieval(TestCase):
         connect_mock = MagicMock()
         mock_cursor = get_mock_db_cursor(connect_mock)
         mock_cursor.fetchall.return_value = self.log_entries
-        mock_cursor.executescript = fail
+        mock_cursor.execute = fail
 
         return connect_mock
 
