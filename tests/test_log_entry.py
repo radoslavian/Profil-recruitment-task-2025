@@ -74,7 +74,7 @@ class LogEntryAttrEncapsulationConversion(TestCase):
         """
         expected_output = f"LogEntry(date={self.date.isoformat()}, "\
             f"level='{self.log_level.name}', " \
-            f"msg='{self.message}')"
+            f"message='{self.message}')"
         self.assertEqual(expected_output, self.received_representation)
 
     def test_dict_date(self):

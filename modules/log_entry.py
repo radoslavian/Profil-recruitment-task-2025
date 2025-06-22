@@ -45,7 +45,7 @@ class LogEntry:
     def __repr__(self):
         return f"LogEntry(date={self['date']}, " \
             f"level='{self['level']}', " \
-            f"msg='{self.message}')"
+            f"message='{self.message}')"
 
     date = property(lambda self: self._date)
     level = property(lambda self: self._log_level)
