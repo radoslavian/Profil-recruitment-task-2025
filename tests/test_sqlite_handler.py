@@ -14,7 +14,7 @@ class LogHandler(TestCase):
         cls.database_path = "/path/to/database.sqlite"
         cls.table_name = "database_log"
         cls.create_database_sql = f"""
-        CREATE TABLE {cls.table_name} (
+        CREATE TABLE IF NOT EXISTS {cls.table_name} (
                     id INTEGER PRIMARY KEY,
                     timestamp TEXT NOT NULL,
                     level TEXT NOT NULL,

@@ -159,7 +159,7 @@ class SQLiteHandler(Handler):
         with self._get_conn() as connection:
             cursor = connection.cursor()
             create_table_sql = f'''
-                CREATE TABLE {self.table_name} (
+                CREATE TABLE IF NOT EXISTS {self.table_name} (
                     id INTEGER PRIMARY KEY,
                     timestamp TEXT NOT NULL,
                     level TEXT NOT NULL,
