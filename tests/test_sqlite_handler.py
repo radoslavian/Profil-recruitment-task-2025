@@ -34,9 +34,12 @@ class LogHandler(TestCase):
         mock_cursor = get_mock_db_cursor(connect_mock)
         SQLiteHandler(self.database_path, self.table_name)
 
-        expected_output = self.create_database_sql.replace(" ", "")
-        received_output = mock_cursor.executescript.call_args[0][0]\
-                                                   .replace(" ", "")
+        def normalize(text):
+            return "\n".join(sql.strip() for sql in text.split("\n"))
+
+        expected_output = normalize(self.create_database_sql)
+        received_output = normalize(
+            mock_cursor.executescript.call_args[0][0])
 
         self.assertEqual(expected_output, received_output)
 
