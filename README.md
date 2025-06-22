@@ -1,3 +1,4 @@
+##### Radosław Kuzyk
 ## Requirements
 The library was written and tested with Python 3.12.1.
 
