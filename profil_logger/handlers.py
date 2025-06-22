@@ -43,7 +43,7 @@ class FileHandler(FileIOHandler):
                 fh.write("")
 
     def persist_log(self, entry: LogEntry):
-        log_line = f"{entry.date} {entry.level} {entry.message}\n"
+        log_line = f"{entry['date']} {entry['level']} {entry['message']}\n"
         with self._get_file_handle("a") as fh:
             fh.write(log_line)
 
@@ -175,8 +175,8 @@ class SQLiteHandler(Handler):
         with self._get_conn() as conn:
             cursor = conn.cursor()
             sql_query = (f"INSERT INTO {self.table_name} (timestamp, "
-                         f"level, message) VALUES ('{entry.date}', "
-                         f"'{entry.level}', '{entry.message}')")
+                         f"level, message) VALUES ('{entry['date']}', "
+                         f"'{entry['level']}', '{entry['message']}')")
 
             cursor.executescript(sql_query)
 

@@ -57,9 +57,9 @@ class PersistingLogs(TestCase):
         Should save a log entry into a file.
         """
         file_handle = self.mock_file_open()
-        call_argument = (f"{self.log_entry.date} "
-                         f"{self.log_entry.level} "
-                         f"{self.log_entry.message}\n")
+        call_argument = (f"{self.log_entry['date']} "
+                         f"{self.log_entry['level']} "
+                         f"{self.log_entry['message']}\n")
         file_handle.write.assert_called_with(call_argument)
 
 

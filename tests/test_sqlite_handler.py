@@ -22,8 +22,8 @@ class LogHandler(TestCase):
                 )
         """
         cls.add_row_sql = ("INSERT INTO {table_name} (timestamp, level, "
-                           "message) VALUES ('{entry.date}', "
-                           "'{entry.level}', '{entry.message}')")
+                           "message) VALUES ('{entry[date]}', "
+                           "'{entry[level]}', '{entry[message]}')")
         _, cls.log_entry = fake_log_entry()
 
     def test_connecting_to_database(self, sqlite_connect):
