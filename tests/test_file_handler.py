@@ -1,7 +1,6 @@
 from unittest import TestCase
-from unittest.mock import patch, mock_open
-from modules.handlers import FileHandler
-from modules.log_entry import LogEntry
+from unittest.mock import mock_open, patch
+from profil_logger import FileHandler, LogEntry
 from .fake_data import log_entry
 
 

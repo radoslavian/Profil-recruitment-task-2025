@@ -1,6 +1,6 @@
 import datetime
 from unittest import TestCase
-from modules.log_entry import LogEntry, LogLevelValue
+from profil_logger.log_entry import LogEntry, LogLevelValue
 
 
 # docstrings are ommited in cases where the test name

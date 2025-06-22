@@ -1,15 +1,13 @@
 import datetime
 from typing import Callable
 from unittest import TestCase
-from unittest.mock import patch, MagicMock
-from modules import profil_logger
-from modules.handlers import FileHandler, JsonHandler
-from modules.log_entry import LogEntry, LogLevelValue
-from modules.profil_logger import ProfilLogger
+from unittest.mock import MagicMock, patch
+from profil_logger import FileHandler, JsonHandler, LogEntry, logger, \
+    LogLevelValue, ProfilLogger
 
 
 @patch("builtins.open")
-@patch(f"{profil_logger.__name__}.datetime", wraps=datetime)
+@patch(f"{logger.__name__}.datetime", wraps=datetime)
 class LoggingMessages(TestCase):
     @classmethod
     def setUpClass(cls):

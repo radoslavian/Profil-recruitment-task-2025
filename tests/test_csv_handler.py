@@ -1,7 +1,7 @@
 from unittest import TestCase
-from unittest.mock import patch, mock_open, MagicMock
+from unittest.mock import MagicMock, mock_open, patch
 from .fake_data import fake_log_entry
-from modules.handlers import CSVHandler
+from profil_logger import CSVHandler
 
 
 @patch("builtins.open", new_callable=mock_open)

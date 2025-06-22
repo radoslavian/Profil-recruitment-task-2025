@@ -2,10 +2,9 @@ import datetime
 import sqlite3
 from typing import List, Tuple
 from unittest import TestCase
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 from .fake_data import fake_log_entry
-from modules.handlers import SQLiteHandler
-from modules.log_entry import LogEntry, LogLevelValue
+from profil_logger import LogEntry, LogLevelValue, SQLiteHandler
 
 
 @patch("sqlite3.connect")

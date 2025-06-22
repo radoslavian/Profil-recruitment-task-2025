@@ -1,8 +1,8 @@
 import datetime
 import re
-from typing import List, Dict, Optional
-from modules.handlers import Handler
-from modules.log_entry import LogEntry, LogLevelValue
+from typing import Dict, List, Optional
+from profil_logger.handlers import Handler
+from profil_logger.log_entry import LogEntry, LogLevelValue
 
 
 class ProfilLoggerReader:

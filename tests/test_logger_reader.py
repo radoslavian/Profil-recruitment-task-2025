@@ -1,9 +1,8 @@
 import datetime
 from unittest import TestCase
-from unittest.mock import patch, MagicMock
-from modules.handlers import FileHandler
-from modules.log_entry import LogEntry, LogLevelValue
-from modules.profil_logger_reader import ProfilLoggerReader
+from unittest.mock import MagicMock, patch
+from profil_logger import FileHandler, LogEntry, LogLevelValue, \
+    ProfilLoggerReader
 
 
 class TestData:

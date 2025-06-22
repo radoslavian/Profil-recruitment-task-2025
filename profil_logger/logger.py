@@ -1,7 +1,7 @@
 import datetime
-from modules.handlers import Handler
-from modules.log_entry import LogLevelValue, LogEntry
 from typing import List
+from .handlers import Handler
+from profil_logger import LogEntry, LogLevelValue
 
 
 DEFAULT_LOG_LEVEL = LogLevelValue.DEBUG

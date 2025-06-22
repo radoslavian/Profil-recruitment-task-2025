@@ -1,5 +1,5 @@
 import datetime
-from modules.log_entry import LogEntry
+from profil_logger import LogEntry
 import random as rnd
 
 

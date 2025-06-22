@@ -4,8 +4,8 @@ import json
 import os
 import sqlite3
 from abc import ABC, abstractmethod
-from typing import List, Dict, Tuple, TextIO, IO
-from modules.log_entry import LogLevelValue, LogEntry
+from typing import Dict, IO, List, TextIO, Tuple
+from profil_logger.log_entry import LogEntry, LogLevelValue
 
 
 class Handler(ABC):
