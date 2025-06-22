@@ -168,3 +168,4 @@ For both grouping methods, you can optionally use boundary dates in the `datetim
 * I replaced the word 'msg' with 'message' in:
   + LogEntry
   + Log files and SQLite table
+Please keep this in mind - if you have any test files that have 'msg' in the database table/CSV file header/as a json field - fetching data from there will fail.
